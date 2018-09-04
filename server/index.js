@@ -4,6 +4,31 @@ const path = require("path");
 const cors = require("cors");
 const app = express();
 
+require("dotenv").config();
+
+//Log Env
+console.log("Environment:", process.env.APP);
+
+//DATABASE
+const models = require("./models");
+models.sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connected to SQL database:", process.env.DB_NAME);
+  })
+  .catch(err => {
+    console.error(
+      "Unable to connect to SQL database:",
+      process.env.DB_NAME,
+      err
+    );
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  // models.sequelize.sync(); //creates table if they do not already exist
+  // models.sequelize.sync({ force: true }); //deletes all tables then recreates them useful for testing and development purposes
+}
+
 const v1 = require("./routes/v1");
 
 //PRODUCTION ONLY
