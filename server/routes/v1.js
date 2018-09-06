@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const userCtrl = require("../controllers/user");
 
 router.get("/", (req, res) => {
   res.status(404).json({
@@ -26,5 +27,7 @@ router.get("/", (req, res) => {
     }
   });
 });
+
+router.post("/signup", userCtrl.signup);
 
 module.exports = router;
