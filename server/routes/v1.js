@@ -29,5 +29,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/signup", userCtrl.signup);
+router.post("/auth", userCtrl.auth);
 
 module.exports = router;
