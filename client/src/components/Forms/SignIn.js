@@ -1,29 +1,41 @@
 import React from "react";
-import { Container } from "../Login";
 
-const LogIn = props => (
+const SignIn = props => (
   <form>
-    <div class="form-group">
-      <label for="Email1">Email address</label>
+    <div className="form-group">
+      <label htmlFor="email">Email address</label>
       <input
         type="email"
-        class="form-control"
-        id="Email1"
-        aria-describedby="emailHelp"
-        placeholder="Email"
+        className="form-control"
+        name="email"
+        id="email"
+        onChange={props.onChange}
+        value={props.email}
       />
+      {props.errors.email ? (
+        <small className="text-danger">{props.errors.email}</small>
+      ) : (
+        ""
+      )}
     </div>
-    <div class="form-group">
-      <label for="Password">Password</label>
+    <div className="form-group">
+      <label htmlFor="password1">Password</label>
       <input
         type="password"
-        class="form-control"
-        id="Password1"
-        placeholder="Password"
+        className="form-control"
+        name="password"
+        id="password1"
+        onChange={props.onChange}
+        value={props.password}
       />
+      {props.errors.password ? (
+        <small className="text-danger">{props.errors.password}</small>
+      ) : (
+        ""
+      )}
     </div>
-    <button type="submit" class="btn btn-primary">
-      Submit
+    <button onClick={props.onSubmit} className="btn btn-primary">
+      Sign In
     </button>
   </form>
 );
