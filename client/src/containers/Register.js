@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import SignUpForm from '../components/Forms/SignUp';
 
 export default class Register extends Component {
@@ -16,9 +17,17 @@ export default class Register extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const {email, password, password2} = this.state
+    const {email, password, password2} = this.state;
     const errors = this.validate({email, password, password2});
     this.setState({errors});
+
+    if( Object.keys(errors).length === 0 ) {
+      axios.post('http://localhost:5000/v1/signup', {email, password}).then( user => {
+        if(user !== null) {
+          this.props.history.push("/login")
+        }
+      })
+    }
 
     console.log('Submitted...')
   }
