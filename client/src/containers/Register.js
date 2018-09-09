@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import SignUpForm from "../components/Forms/SignUp";
 import { Link } from "react-router-dom";
+import { API_ROOT } from "../services/api-config";
+
+console.log("API_ROOT ", API_ROOT);
 
 export default class Register extends Component {
   state = {
@@ -23,28 +26,25 @@ export default class Register extends Component {
     this.setState({ errors });
 
     if (Object.keys(errors).length === 0) {
-      axios
-        .post("http://localhost:5000/v1/signup", { email, password })
-        .then(user => {
-          if (user.data.success) {
-            this.props.history.push("/login");
-          } else {
-            this.setState({
-              errors: { ...this.state.errors, global: user.data.message }
-            });
-          }
-        });
+      axios.post(`${API_ROOT}/signup`, { email, password }).then(user => {
+        if (user.data.success) {
+          this.props.history.push("/login");
+        } else {
+          this.setState({
+            errors: { ...this.state.errors, global: user.data.message }
+          });
+        }
+      });
     }
   };
 
   validate = data => {
     const errors = {};
 
-    !data.email ? (errors.email = "Enter your email address.") : "";
-    !data.password ? (errors.password = "Enter your password.") : "";
-    data.password !== data.password2
-      ? (errors.password = "Your passwords doesn't match.")
-      : "";
+    !data.email && (errors.email = "Enter your email address.");
+    !data.password && (errors.password = "Enter your password.");
+    data.password !== data.password2 &&
+      (errors.password = "Your passwords doesn't match.");
 
     return errors;
   };

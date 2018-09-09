@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import SignInForm from "../components/Forms/SignIn";
+import { API_ROOT } from "../services/api-config";
 
 export default class Login extends Component {
   state = {
@@ -21,21 +22,16 @@ export default class Login extends Component {
     this.setState({ errors });
 
     if (Object.keys(errors).length === 0) {
-      axios
-        .post("http://localhost:7777/v1/auth", { email, password })
-        .then(user => {
-          if (user.data.success) {
-            console.log("user success", user.data);
-
-            localStorage.setItem("JWT", user.data.token);
-            this.props.history.push("/");
-          } else {
-            this.setState({
-              errors: { ...this.state.errors, global: user.data.message }
-            });
-            console.log("user Error", user.data);
-          }
-        });
+      axios.post(`${API_ROOT}/auth`, { email, password }).then(user => {
+        if (user.data.success) {
+          localStorage.setItem("JWT", user.data.token);
+          this.props.history.push("/");
+        } else {
+          this.setState({
+            errors: { ...this.state.errors, global: user.data.message }
+          });
+        }
+      });
     }
   };
 
@@ -55,7 +51,6 @@ export default class Login extends Component {
   };
 
   render() {
-    console.log("state", this.state);
     return (
       <div className="mt-5">
         <div className="text-center mb-5">

@@ -3,7 +3,7 @@ import React from "react";
 const SignUp = props => (
   <form>
     {!!props.errors.global && (
-      <div class="alert alert-danger">{props.errors.global}</div>
+      <div className="alert alert-danger">{props.errors.global}</div>
     )}
     <div className="form-group">
       <label htmlFor="email">Email address</label>
