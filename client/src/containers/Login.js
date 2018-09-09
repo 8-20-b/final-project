@@ -59,6 +59,9 @@ export default class Login extends Component {
             Thank you for using our service. Please enter your credentials.
           </p>
           <p>Not a member yet? Sign up for free!</p>
+          <Link to="/signup" className="text-danger">
+            Sign in to your account.
+          </Link>
         </div>
         <div className="container">
           <div className="row">
