@@ -41,10 +41,10 @@ export default class Register extends Component {
   validate = data => {
     const errors = {};
 
-    !data.email && (errors.email = "Enter your email address.");
-    !data.password && (errors.password = "Enter your password.");
-    data.password !== data.password2 &&
-      (errors.password = "Your passwords doesn't match.");
+    if (!data.email) errors.email = "Enter your email address.";
+    if (!data.password) errors.password = "Enter your password.";
+    if (data.password !== data.password2)
+      errors.password = "Your passwords doesn't match.";
 
     return errors;
   };

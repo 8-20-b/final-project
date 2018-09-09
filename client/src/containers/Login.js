@@ -38,8 +38,8 @@ export default class Login extends Component {
   validate = data => {
     const errors = {};
 
-    !data.email ? (errors.email = "Enter your email address.") : "";
-    !data.password ? (errors.password = "Enter your password.") : "";
+    if (!data.email) errors.email = "Enter your email address.";
+    if (!data.password) errors.password = "Enter your password.";
 
     return errors;
   };

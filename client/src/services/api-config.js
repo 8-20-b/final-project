@@ -3,8 +3,8 @@ const apiVersion = "v1";
 
 const hostname = window && window.location && window.location.hostname;
 
-if (hostname === "herokuapp.com") {
-  backendHost = "https://movie-reviews.herokuapp.com";
+if (hostname === "movie-reviews.herokuapp.com") {
+  backendHost = window.location.origin;
 } else {
   backendHost = "http://localhost:7777";
 }
