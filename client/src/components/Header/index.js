@@ -49,7 +49,7 @@ const Header = ({ brand }) => (
           <React.Fragment>
             <li className="nav-item">
               <NavLink to="/login" className="btn btn-outline-danger ml-3">
-                Login
+                Log In
               </NavLink>
             </li>
             <li className="nav-item">
