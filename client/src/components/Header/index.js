@@ -40,7 +40,7 @@ const Header = ({ brand }) => (
           <li className="nav-item">
             <button
               onClick={() => localStorage.removeItem("JWT")}
-              className="btn btn-outline-primary ml-3"
+              className="btn btn-danger ml-3"
             >
               Logout
             </button>
@@ -48,12 +48,12 @@ const Header = ({ brand }) => (
         ) : (
           <React.Fragment>
             <li className="nav-item">
-              <NavLink to="/login" className="btn btn-outline-primary ml-5">
+              <NavLink to="/login" className="btn btn-outline-danger ml-3">
                 Login
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/register" className="btn btn-primary ml-3">
+              <NavLink to="/register" className="btn btn-danger ml-3">
                 Sign Up
               </NavLink>
             </li>

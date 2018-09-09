@@ -30,6 +30,9 @@ export default class Login extends Component {
             localStorage.setItem("JWT", user.data.token);
             this.props.history.push("/");
           } else {
+            this.setState({
+              errors: { ...this.state.errors, global: user.data.message }
+            });
             console.log("user Error", user.data);
           }
         });
@@ -52,13 +55,20 @@ export default class Login extends Component {
   };
 
   render() {
+    console.log("state", this.state);
     return (
       <div className="mt-5">
-        <h1 className="text-center">User Authentication</h1>
+        <div className="text-center mb-5">
+          <h1 className="mb-4 text-danger">Sign in to your account</h1>
+          <p className="text-muted">
+            Thank you for using our service. Please enter your credentials.
+          </p>
+          <p>Not a member yet? Sign up for free!</p>
+        </div>
         <div className="container">
           <div className="row">
             <div className="col-md-7 m-auto">
-              <div className="bg-info p-5 text-white">
+              <div className="bg-dark rounded p-5 text-white">
                 <SignInForm
                   onChange={this.handleChange}
                   onSubmit={this.handleSubmit}

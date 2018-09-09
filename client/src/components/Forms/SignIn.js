@@ -2,6 +2,9 @@ import React from "react";
 
 const SignIn = props => (
   <form>
+    {!!props.errors.global && (
+      <div className="alert alert-danger">{props.errors.global}</div>
+    )}
     <div className="form-group">
       <label htmlFor="email">Email address</label>
       <input
@@ -34,7 +37,7 @@ const SignIn = props => (
         ""
       )}
     </div>
-    <button onClick={props.onSubmit} className="btn btn-primary">
+    <button onClick={props.onSubmit} className="mt-4 btn btn-danger">
       Sign In
     </button>
   </form>
