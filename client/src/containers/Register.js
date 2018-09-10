@@ -44,7 +44,7 @@ export default class Register extends Component {
     if (!data.email) errors.email = "Enter your email address.";
     if (!data.password) errors.password = "Enter your password.";
     if (data.password !== data.password2)
-      errors.password = "Your passwords doesn't match.";
+      errors.password = "Your passwords don't match.";
 
     return errors;
   };
@@ -59,15 +59,15 @@ export default class Register extends Component {
     return (
       <div className="mt-5">
         <div className="text-center mb-5">
-          <h1 className="mb-4 text-danger">Sign up... it's free!</h1>
+          <h1 className="mb-4 text-danger">Sign Up... It's Free!</h1>
           <p className="text-muted">
-            Easily signup to our community and enjoy of multiple benefits we
-            offer for members. .
+            Easily sign up to our community and enjoy multiple benefits we offer
+            for members.
           </p>
           <p>
             Already a member?{" "}
             <Link to="/login" className="text-danger">
-              Sign in your account
+              Sign in to your account.
             </Link>
           </p>
         </div>

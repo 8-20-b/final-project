@@ -6,7 +6,7 @@ import { Home, Login, Register } from "./containers/";
 const App = () => (
   <Router>
     <React.Fragment>
-      <Header brand="Movies Reviews" />
+      <Header brand="Movie Reviews" />
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/register" component={Register} />

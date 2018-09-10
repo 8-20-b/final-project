@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import SignInForm from "../components/Forms/SignIn";
 import { API_ROOT } from "../services/api-config";
+import { Link } from "react-router-dom";
 
 export default class Login extends Component {
   state = {
@@ -54,11 +55,16 @@ export default class Login extends Component {
     return (
       <div className="mt-5">
         <div className="text-center mb-5">
-          <h1 className="mb-4 text-danger">Sign in to your account</h1>
+          <h1 className="mb-4 text-danger">Sign In To Your Account</h1>
           <p className="text-muted">
             Thank you for using our service. Please enter your credentials.
           </p>
-          <p>Not a member yet? Sign up for free!</p>
+          <p>
+            Not a member yet? Sign up for free!{" "}
+            <Link to="/register" className="text-danger">
+              Sign up for an account.
+            </Link>
+          </p>
         </div>
         <div className="container">
           <div className="row">
