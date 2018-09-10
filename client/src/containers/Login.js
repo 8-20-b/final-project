@@ -59,10 +59,12 @@ export default class Login extends Component {
           <p className="text-muted">
             Thank you for using our service. Please enter your credentials.
           </p>
-          <p>Not a member yet? Sign up for free!</p>
-          <Link to="/signup" className="text-danger">
-            Sign in to your account.
-          </Link>
+          <p>
+            Not a member yet? Sign up for free!{" "}
+            <Link to="/register" className="text-danger">
+              Sign up for an account.
+            </Link>
+          </p>
         </div>
         <div className="container">
           <div className="row">
