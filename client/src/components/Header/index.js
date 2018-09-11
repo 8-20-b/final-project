@@ -1,7 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "../../actions/user";
 
-const Header = ({ brand }) => (
+const Header = ({ brand, isAuth, logout }) => (
   <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
     <NavLink className="navbar-brand" to="/">
       {brand}
@@ -36,12 +38,9 @@ const Header = ({ brand }) => (
             Actors
           </NavLink>
         </li>
-        {localStorage.getItem("JWT") ? (
+        {isAuth ? (
           <li className="nav-item">
-            <button
-              onClick={() => localStorage.removeItem("JWT")}
-              className="btn btn-danger ml-3"
-            >
+            <button onClick={() => logout()} className="btn btn-danger ml-3">
               Logout
             </button>
           </li>
@@ -64,4 +63,13 @@ const Header = ({ brand }) => (
   </nav>
 );
 
-export default Header;
+const mapStateToProps = state => {
+  return {
+    isAuth: !!state.user.token
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { logout }
+)(Header);

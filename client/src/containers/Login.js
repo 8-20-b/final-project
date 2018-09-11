@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
+import { login } from "../actions/user";
 import SignInForm from "../components/Forms/SignIn";
-import { API_ROOT } from "../services/api-config";
 import { Link } from "react-router-dom";
 
-export default class Login extends Component {
+class Login extends Component {
   state = {
     email: "",
     password: "",
@@ -23,16 +23,20 @@ export default class Login extends Component {
     this.setState({ errors });
 
     if (Object.keys(errors).length === 0) {
-      axios.post(`${API_ROOT}/auth`, { email, password }).then(user => {
-        if (user.data.success) {
-          localStorage.setItem("JWT", user.data.token);
-          this.props.history.push("/");
-        } else {
+      this.props
+        .login({ email, password })
+        .then(res => {
+          if (res.user.success) {
+            localStorage.setItem("JWT", res.user.token);
+
+            this.props.history.push("/");
+          }
+        })
+        .catch(err =>
           this.setState({
-            errors: { ...this.state.errors, global: user.data.message }
-          });
-        }
-      });
+            errors: { ...this.state.errors, global: err.message }
+          })
+        );
     }
   };
 
@@ -46,9 +50,7 @@ export default class Login extends Component {
   };
 
   componentWillMount = () => {
-    if (localStorage.getItem("JWT")) {
-      this.props.history.push("/");
-    }
+    this.props.isAuth && this.props.history.push("/");
   };
 
   render() {
@@ -85,3 +87,14 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    isAuth: !!state.user.token
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { login }
+)(Login);
