@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
+import { signup } from "../actions/user";
 import SignUpForm from "../components/Forms/SignUp";
 import { Link } from "react-router-dom";
-import { API_ROOT } from "../services/api-config";
 
-console.log("API_ROOT ", API_ROOT);
-
-export default class Register extends Component {
+class Register extends Component {
   state = {
     email: "",
     password: "",
@@ -26,15 +24,14 @@ export default class Register extends Component {
     this.setState({ errors });
 
     if (Object.keys(errors).length === 0) {
-      axios.post(`${API_ROOT}/signup`, { email, password }).then(user => {
-        if (user.data.success) {
-          this.props.history.push("/login");
-        } else {
+      this.props
+        .signup({ email, password })
+        .then(res => res.user.success && this.props.history.push("/login"))
+        .catch(err =>
           this.setState({
-            errors: { ...this.state.errors, global: user.data.message }
-          });
-        }
-      });
+            errors: { ...this.state.errors, global: err.message }
+          })
+        );
     }
   };
 
@@ -50,9 +47,7 @@ export default class Register extends Component {
   };
 
   componentWillMount = () => {
-    if (localStorage.getItem("JWT")) {
-      this.props.history.push("/");
-    }
+    this.props.isAuth && this.props.history.push("/");
   };
 
   render() {
@@ -91,3 +86,14 @@ export default class Register extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    isAuth: !!state.user.token
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { signup }
+)(Register);
