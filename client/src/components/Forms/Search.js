@@ -1,26 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 class Search extends Component {
   state = {
-    search: ""
+    search: "scarface"
   };
 
-  onSearch = e => {
-    e.preventDefault();
-    axios
-      .get(
-        `https://api.themoviedb.org/3/search/movie/?query=${
-          this.state.search
-        }&api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
-      )
-      .then(res => console.log("results", res.data));
-  };
+  componentDidMount = () => {};
 
   render() {
     return (
-      <form className="form-inline mt-2 mt-md-0" _lpchecked="1">
+      <form className="form-inline mt-2 mt-md-0">
         <input
           className="form-control mr-sm-2"
           type="text"
@@ -28,13 +19,12 @@ class Search extends Component {
           onChange={e => this.setState({ search: e.target.value })}
           value={this.state.search}
         />
-        <button
-          onClick={this.onSearch}
+        <Link
+          to={`/results/${this.state.search}`}
           className="btn btn-outline-success my-2 my-sm-0"
-          type="submit"
         >
           Search
-        </button>
+        </Link>
       </form>
     );
   }
