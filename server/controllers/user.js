@@ -14,8 +14,11 @@ const signup = (req, res) => {
             message: `Something went wrong: ${error}`
           });
         } else {
-          User.create({ email, password: hash }).then(newUser =>
-            res.json(newUser)
+          User.create({ email, password: hash }).then(() =>
+            res.json({
+              success: true,
+              message: "User has been successfully created."
+            })
           );
         }
       });

@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/user";
+import SearchForm from "../Forms/Search";
 
 const Header = ({ brand, isAuth, logout }) => (
   <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
@@ -17,6 +18,7 @@ const Header = ({ brand, isAuth, logout }) => (
       <span className="navbar-toggler-icon" />
     </button>
     <div className="collapse navbar-collapse" id="navbarCollapse">
+      <SearchForm />
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
           <NavLink className="nav-link" exact to="/">

@@ -3,7 +3,7 @@ const userCtrl = require("../controllers/user");
 
 router.get("/", (req, res) => {
   res.status(404).json({
-    name: "Movies Reviews API",
+    name: "Movie Reviews API",
     description:
       "A RESTful API that works in companion with themoviedb.org RESTful API to allow users to interact with movies.",
     url: "https://movie-reviews.herokuapp.com/api",
