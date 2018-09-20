@@ -32,11 +32,11 @@ class Search extends Component {
         `https://api.themoviedb.org/3/movie/${movie_id}?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
       )
       .then(res =>
-        axios.post(`${API_ROOT}/movies`, res.data).then(movie => {
-          this.setState({ results: [] });
-          return <Redirect to={`/movie/${movie.movieId}`} />;
-        })
+        axios
+          .post(`${API_ROOT}/movies`, res.data)
+          .then(movie => this.setState({ results: [] }))
       );
+    console.log("props", this.props);
   };
 
   componentDidMount = () => {};
@@ -67,15 +67,16 @@ class Search extends Component {
                   onClick={e => {
                     e.preventDefault();
                     this.goToMovie(res.id);
+                    return <Redirect to={`/movie/${res.id}`} />;
                   }}
                 >
                   <img
                     style={{ height: "50px" }}
                     className="img-fluid rounded mr-3"
-                    src={`http://image.tmdb.org/t/p/w185${res.poster_path}`}
+                    src={`http://image.tmdb.org/t/p/w185/${res.poster_path}`}
                     alt={res.title}
                   />
-                  {res.title}
+                  {res.title} ({new Date(res.release_date).getFullYear()})
                 </button>
               </li>
             ))}

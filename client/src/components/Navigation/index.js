@@ -30,10 +30,10 @@ const Navigation = ({ query }) => (
         <li className="nav-item">
           <NavLink
             className="nav-link d-flex justify-content-between"
-            to="/movies/coming-soon"
+            to="/movies/upcoming"
           >
-            Coming Soon
-            {query === "coming-soon" && (
+            Upcoming
+            {query === "upcoming" && (
               <i className="fas fa-chevron-right mt-1" />
             )}
           </NavLink>

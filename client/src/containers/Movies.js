@@ -11,11 +11,16 @@ export default class Catalog extends Component {
 
   componentDidMount = () => {
     axios
-      .get(`${API_ROOT}/movies`)
+      .get(`${API_ROOT}/movies?query=${this.props.match.params.query}`)
       .then(({ data: movies }) => this.setState({ movies }));
   };
 
   render() {
+    const pageTitle = this.props.match.params.query
+      .replace("-", " ")
+      .toLowerCase()
+      .replace(/\b[a-z]/g, letter => letter.toUpperCase());
+
     return (
       <div className="container-fluid">
         <div className="row">
@@ -24,7 +29,7 @@ export default class Catalog extends Component {
             className="col-md-9 ml-sm-auto col-lg-10 pt-5 px-5"
             style={{ height: "calc(100vh - 62px)" }}
           >
-            <h1 className="mb-4">New Releases</h1>
+            <h1 className="mb-4">{pageTitle}</h1>
             <MoviesList movies={this.state.movies} />
           </main>
         </div>

@@ -1,9 +1,30 @@
+const Op = require("sequelize").Op;
+
 const Movie = require("../models").Movie;
 const Genre = require("../models").Genre;
 const Cast = require("../models").Cast;
 
 const getAll = (req, res) => {
-  Movie.findAll().then(movies => res.json(movies));
+  console.log("query:", req.query.query);
+
+  const where = {};
+  if (req.query.query === "new-releases") {
+    console.log("it works");
+    where.releaseDate = {
+      [Op.lt]: new Date(),
+      [Op.gt]: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)
+    };
+  } else if (req.query.query === "upcoming") {
+    where.releaseDate = {
+      [Op.gt]: new Date()
+    };
+  }
+
+  Movie.findAll({
+    where,
+    limit: 10,
+    order: [["releaseDate", "DESC"]]
+  }).then(movies => res.json(movies));
 };
 
 const create = (req, res) => {

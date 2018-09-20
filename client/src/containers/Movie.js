@@ -27,6 +27,7 @@ export default class Movie extends Component {
 
   render() {
     const { movie } = this.state;
+    console.log("movie", movie);
     return (
       <div className="container-fluid">
         <div className="row">
@@ -49,9 +50,7 @@ export default class Movie extends Component {
                 <div className="col-md-3">
                   <img
                     className="img-fluid"
-                    src={`https://image.tmdb.org/t/p/w370_and_h556_bestv2/${
-                      movie.posterPath
-                    }`}
+                    src={`https://image.tmdb.org/t/p/w300${movie.posterPath}`}
                     alt={movie.title}
                   />
                 </div>
