@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const userCtrl = require("../controllers/user");
+const movieCtrl = require("../controllers/movie");
 
 router.get("/", (req, res) => {
   res.status(404).json({
@@ -30,5 +31,8 @@ router.get("/", (req, res) => {
 
 router.post("/signup", userCtrl.signup);
 router.post("/auth", userCtrl.auth);
+
+router.get("/movies", movieCtrl.getAll);
+router.post("/movies", movieCtrl.create);
 
 module.exports = router;

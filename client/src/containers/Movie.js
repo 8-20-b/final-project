@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { API_ROOT } from "../services/api-config";
+import Navigation from "../components/Navigation";
 
 export default class Movie extends Component {
   state = {
@@ -16,38 +18,51 @@ export default class Movie extends Component {
           this.props.match.params.movie_id
         }?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
       )
-      .then(res => this.setState({ movie: res.data }));
+      .then(res =>
+        axios
+          .post(`${API_ROOT}/movies`, res.data)
+          .then(movie => this.setState({ movie: movie.data }))
+      );
   };
 
   render() {
-    console.log("state", this.state.movie);
     const { movie } = this.state;
     return (
-      <div className="container">
-        <h1>Results page</h1>
+      <div className="container-fluid">
         <div className="row">
-          <div className="col-md-9 mx-auto">
-            <div className="results-list">
-              <div className="movie-item">
-                <div className="row mb-3">
-                  <div className="col-md-3">
-                    <img
-                      className="img-fluid"
-                      src={`https://image.tmdb.org/t/p/w370_and_h556_bestv2/${
-                        movie.poster_path
-                      }`}
-                      alt={movie.title}
-                    />
-                  </div>
-                  <div className="col-md-9">
-                    <h2>{movie.title}</h2>
-                    <small className="text-muted">{movie.release_date}</small>
-                    <p>{movie.overview}</p>
-                  </div>
+          <Navigation query={this.props.match.params.query} />
+          <main
+            className="col-md-9 ml-sm-auto col-lg-10 pt-5 px-5"
+            style={{ height: "calc(100vh - 62px)" }}
+          >
+            <div
+              style={{
+                background: `url(https://image.tmdb.org/t/p/original/${
+                  movie.backdropPath
+                }) center center no-repeat`,
+                opacity: 0.1
+              }}
+              className="h-100 position-absolute"
+            />
+            <div className="movie-card row">
+              <div className="row mb-3">
+                <div className="col-md-3">
+                  <img
+                    className="img-fluid"
+                    src={`https://image.tmdb.org/t/p/w370_and_h556_bestv2/${
+                      movie.posterPath
+                    }`}
+                    alt={movie.title}
+                  />
+                </div>
+                <div className="col-md-9">
+                  <h2>{movie.title}</h2>
+                  <small className="text-muted">{movie.releaseDate}</small>
+                  <p>{movie.overview}</p>
                 </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     );
