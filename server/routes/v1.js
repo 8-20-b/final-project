@@ -33,6 +33,9 @@ router.post("/signup", userCtrl.signup);
 router.post("/auth", userCtrl.auth);
 
 router.get("/movies", movieCtrl.getAll);
+router.get("/movies/:id", movieCtrl.getOne);
 router.post("/movies", movieCtrl.create);
+router.post("/movies/list", movieCtrl.addToList);
+router.delete("/movies/list", movieCtrl.removeFromList);
 
 module.exports = router;

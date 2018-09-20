@@ -1,13 +1,18 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import axios from "axios";
 import { API_ROOT } from "../services/api-config";
 import Navigation from "../components/Navigation";
 
-export default class Movie extends Component {
+class Movie extends Component {
   state = {
-    movie: {}
+    movie: {},
+    favorite: false,
+    later: false
   };
+
   componentDidMount = () => {
+    //this.fetchMovie();
     this.searchMovies();
   };
 
@@ -23,6 +28,23 @@ export default class Movie extends Component {
           .post(`${API_ROOT}/movies`, res.data)
           .then(movie => this.setState({ movie: movie.data }))
       );
+  };
+
+  addToList = (type, movieId, userId) => {
+    axios
+      .post(`${API_ROOT}/movies/list`, { type, movieId, userId })
+      .then(res => {
+        res.data.success && this.setState({ [type]: true });
+      })
+      .catch(() => console.log("Something went wrong."));
+  };
+
+  fetchMovie = () => {
+    axios
+      .get(`${API_ROOT}/movies/${this.props.match.params.movie_id}`)
+      .then(movie => {
+        this.setState({ movie });
+      });
   };
 
   render() {
@@ -58,6 +80,24 @@ export default class Movie extends Component {
                   <h2>{movie.title}</h2>
                   <small className="text-muted">{movie.releaseDate}</small>
                   <p>{movie.overview}</p>
+                  <div>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() =>
+                        this.addToList(
+                          "favorite",
+                          movie.movieId,
+                          this.props.userId
+                        )
+                      }
+                    >
+                      {this.state.favorite ? (
+                        <i className="fas fa-heart" />
+                      ) : (
+                        <i className="far fa-heart" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -67,3 +107,12 @@ export default class Movie extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  console.log("redux", state);
+  return {
+    userId: state.user.userId
+  };
+};
+
+export default connect(mapStateToProps)(Movie);

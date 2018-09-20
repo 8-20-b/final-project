@@ -1,15 +1,16 @@
-const Op = require("sequelize").Op;
+const Sequelize = require("sequelize");
+
+const Op = Sequelize.Op;
 
 const Movie = require("../models").Movie;
 const Genre = require("../models").Genre;
-const Cast = require("../models").Cast;
+const List = require("../models").List;
 
 const getAll = (req, res) => {
   console.log("query:", req.query.query);
 
   const where = {};
   if (req.query.query === "new-releases") {
-    console.log("it works");
     where.releaseDate = {
       [Op.lt]: new Date(),
       [Op.gt]: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)
@@ -19,12 +20,25 @@ const getAll = (req, res) => {
       [Op.gt]: new Date()
     };
   }
-
+  List;
   Movie.findAll({
     where,
     limit: 10,
     order: [["releaseDate", "DESC"]]
   }).then(movies => res.json(movies));
+};
+
+const getOne = (req, res) => {
+  Movie.findOne({
+    where: { movieId: req.params.id },
+    include: [{ model: List }]
+  }).then(movie => {
+    if (movie) {
+      res.json(movie);
+    } else {
+      res.json({ success: false, message: "No movies found with that ID." });
+    }
+  });
 };
 
 const create = (req, res) => {
@@ -65,4 +79,18 @@ const create = (req, res) => {
   });
 };
 
-module.exports = { create, getAll };
+const addToList = (req, res) => {
+  const { type, movieId, userId } = req.body;
+  List.create({ type, movieId, userId })
+    .then(data => res.json({ success: true, data }))
+    .catch(() => res.json({ success: false }));
+};
+
+const removeFromList = (req, res) => {
+  const { movieId, userId } = req.body;
+  List.destroy({ where: { movieId, userId } })
+    .then(data => res.json({ success: true, data }))
+    .catch(() => res.json({ success: false }));
+};
+
+module.exports = { create, getAll, getOne, addToList, removeFromList };
