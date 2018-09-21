@@ -23,6 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     // });
   };
 
-  sequelize.sync({ force: true });
+  //sequelize.sync({ force: true });
   return Model;
 };

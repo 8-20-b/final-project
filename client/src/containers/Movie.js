@@ -4,11 +4,14 @@ import axios from "axios";
 import { API_ROOT } from "../services/api-config";
 import Navigation from "../components/Navigation";
 
+
+
 class Movie extends Component {
   state = {
     movie: {},
     favorite: false,
-    later: false
+    later: false,
+    comments: []
   };
 
   componentDidMount = () => {
@@ -77,12 +80,15 @@ class Movie extends Component {
                   />
                 </div>
                 <div className="col-md-9">
-                  <h2>{movie.title}</h2>
-                  <small className="text-muted">{movie.releaseDate}</small>
-                  <p>{movie.overview}</p>
-                  <div>
+                  <h2>
+                    {movie.title}{" "}
+                    <span className="text-white-50">
+                      ({new Date(movie.releaseDate).getFullYear()})
+                    </span>
+                  </h2>
+                  <div className="my-3">
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-danger mr-3"
                       onClick={() =>
                         this.addToList(
                           "favorite",
@@ -97,6 +103,69 @@ class Movie extends Component {
                         <i className="far fa-heart" />
                       )}
                     </button>
+                    <button
+                      className="btn btn-danger mr-3"
+                      onClick={() =>
+                        this.addToList(
+                          "later",
+                          movie.movieId,
+                          this.props.userId
+                        )
+                      }
+                    >
+                      {this.state.favorite ? (
+                        <i className="fas fa-clock" />
+                      ) : (
+                        <i className="far fa-clock" />
+                      )}
+                    </button>
+                    <button className="btn btn-outline-danger">
+                      <i className="far fa-play-circle" /> Watch Trailer
+                    </button>
+                  </div>
+                  <h4>Overview</h4>
+                  <p>{movie.overview}</p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-12">
+                  <ul className="nav nav-tabs" id="movieTabs" role="tablist">
+                    <li className="nav-item">
+                      <a
+                        className="nav-link active"
+                        id="actors-tab"
+                        data-toggle="tab"
+                        href="#actors"
+                      >
+                        Actors
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
+                        id="comments-tab"
+                        data-toggle="tab"
+                        href="#comments"
+                      >
+                        Comments
+                      </a>
+                    </li>
+                  </ul>
+                  <div className="tab-content" id="myTabContent">
+                    <div
+                      className="tab-pane fade show active"
+                      id="actors"
+                      role="tabpanel"
+                    >
+                      <h2>Actors List</h2>
+                    </div>
+                    <div
+                      className="tab-pane fade"
+                      id="comments"
+                      role="tabpanel"
+                    >
+                      <h2>Comments List</h2>
+                    </div>
                   </div>
                 </div>
               </div>
