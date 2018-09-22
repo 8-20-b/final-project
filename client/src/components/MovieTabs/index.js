@@ -8,6 +8,16 @@ export default ({ actors, comments }) => {
         <li className="nav-item">
           <a
             className="nav-link active"
+            id="actors-tab"
+            data-toggle="tab"
+            href="#actors"
+          >
+            Actors
+          </a>
+        </li>{" "}
+        <li className="nav-item">
+          <a
+            className="nav-link "
             id="comments-tab"
             data-toggle="tab"
             href="#comments"
@@ -15,28 +25,18 @@ export default ({ actors, comments }) => {
             Comments
           </a>
         </li>
-        <li className="nav-item">
-          <a
-            className="nav-link "
-            id="actors-tab"
-            data-toggle="tab"
-            href="#actors"
-          >
-            Actors
-          </a>
-        </li>
       </ul>
       <div className="tab-content" id="myTabContent">
-        <div
-          className="tab-pane fade show active pt-4"
-          id="comments"
-          role="tabpanel"
-        >
+        <div className="tab-pane fade pt-4" id="comments" role="tabpanel">
           <CommentsList dataSource={comments} />
         </div>
-        <div className="tab-pane fade pt-4" id="actors" role="tabpanel">
+        <div
+          className="tab-pane fade show active pt-4"
+          id="actors"
+          role="tabpanel"
+        >
           <div className="row">
-            {actors.splice(0, 6).map(actor => (
+            {actors.slice(0, 6).map(actor => (
               <div key={actor.cast_id} className="col-md-2">
                 <img
                   className="img-fluid"

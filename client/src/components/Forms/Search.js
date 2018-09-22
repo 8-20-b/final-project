@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { API_ROOT } from "../../services/api-config";
 
@@ -62,12 +62,11 @@ class Search extends Component {
           >
             {this.state.results.splice(0, 5).map(res => (
               <li key={res.id} className="list-group-item text-black text-dark">
-                <button
+                <Link
+                  to={`/movie/${res.id}`}
                   className="btn btn-link"
-                  onClick={e => {
-                    e.preventDefault();
+                  onClick={() => {
                     this.goToMovie(res.id);
-                    return <Redirect to={`/movie/${res.id}`} />;
                   }}
                 >
                   <img
@@ -77,7 +76,7 @@ class Search extends Component {
                     alt={res.title}
                   />
                   {res.title} ({new Date(res.release_date).getFullYear()})
-                </button>
+                </Link>
               </li>
             ))}
           </ul>

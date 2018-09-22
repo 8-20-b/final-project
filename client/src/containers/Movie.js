@@ -40,7 +40,6 @@ class Movie extends Component {
   };
 
   componentDidMount = () => {
-    //this.fetchMovie();
     this.searchMovie();
     this.searchCast();
   };
@@ -77,17 +76,8 @@ class Movie extends Component {
       .catch(() => console.log("Something went wrong."));
   };
 
-  fetchMovie = () => {
-    axios
-      .get(`${API_ROOT}/movies/${this.props.match.params.movie_id}`)
-      .then(movie => {
-        this.setState({ movie });
-      });
-  };
-
   render() {
     const { movie } = this.state;
-    console.log("movie", movie);
     return (
       <div className="container-fluid">
         <div className="row">

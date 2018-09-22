@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 
 const Navigation = ({ query, isAuth }) => (
-  <nav className="col-md-3 col-lg-2 d-none d-md-block bg-dark p-0">
-    <div className="position-sticky">
-      <ul className="nav flex-column mt-5">
+  <nav className="col-md-3 col-lg-2 d-none d-md-block p-0">
+    <div className="position-sticky h-100 bg-dark" style={{ top: 0 }}>
+      <ul className="nav flex-column pt-4">
         <li className="nav-item">
           <NavLink
             className="nav-link d-flex justify-content-between"

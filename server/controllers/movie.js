@@ -7,24 +7,26 @@ const Genre = require("../models").Genre;
 const List = require("../models").List;
 
 const getAll = (req, res) => {
-  console.log("query:", req.query.query);
+  //console.log("query:", req.query.query);
 
   const where = {};
+  let order = [];
   if (req.query.query === "new-releases") {
     where.releaseDate = {
       [Op.lt]: new Date(),
       [Op.gt]: new Date(new Date() - 90 * 24 * 60 * 60 * 1000)
     };
+    order = [["releaseDate", "DESC"]];
   } else if (req.query.query === "upcoming") {
     where.releaseDate = {
       [Op.gt]: new Date()
     };
+    order = [["releaseDate", "ASC"]];
   }
-  List;
   Movie.findAll({
     where,
     limit: 10,
-    order: [["releaseDate", "DESC"]]
+    order
   }).then(movies => res.json(movies));
 };
 
