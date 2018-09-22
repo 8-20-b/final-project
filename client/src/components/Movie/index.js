@@ -5,8 +5,8 @@ export default ({ movie }) => (
   <Link to={`/movie/${movie.movieId}`}>
     <figure>
       <img
-        className="d-block w-100"
-        src={`http://image.tmdb.org/t/p/w185/${movie.posterPath}`}
+        className="d-block w-100 rounded"
+        src={`http://image.tmdb.org/t/p/w300/${movie.posterPath}`}
         alt={movie.title}
       />
       <figcaption>

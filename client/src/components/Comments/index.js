@@ -1,9 +1,10 @@
 import React from "react";
+import Comment from "./Comment";
 
 const Comments = ({ dataSource }) => (
-  <div class="">
-    {dataSource.map(comment => (
-      <Comment data={comment} />
+  <div className="">
+    {dataSource.map((comment, key) => (
+      <Comment key={key} comment={comment} />
     ))}
   </div>
 );

@@ -26,7 +26,7 @@ export default class Catalog extends Component {
         <div className="row">
           <Navigation query={this.props.match.params.query} />
           <main
-            className="col-md-9 ml-sm-auto col-lg-10 pt-5 px-5"
+            className="col-md-9 ml-sm-auto col-lg-10 pt-md-5 px-md-5"
             style={{ height: "calc(100vh - 62px)" }}
           >
             <h1 className="mb-4">{pageTitle}</h1>

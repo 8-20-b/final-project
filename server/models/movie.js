@@ -36,25 +36,13 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Model.associate = function(models) {
-    // this.Movie = this.belongsTo(models.Genre, {
-    //   foreignKey: "genreId"
-    // });
-    // this.Movie = this.belongsTo(models.Actor, {
-    //   foreignKey: "actorId"
-    // });
-
-    this.Genre = this.belongsToMany(models.Genre, {
+    this.Genres = this.belongsToMany(models.Genre, {
       through: "MovieGenres",
-      foreignKey: "movieId"
-    });
-
-    this.Cast = this.belongsToMany(models.Cast, {
-      through: "MovieCasts",
-      foreignKey: "movieId"
+      foreignKey: "genreId"
     });
   };
 
-  // sequelize.sync({ force: true });
+  sequelize.sync({ force: true });
 
   return Model;
 };

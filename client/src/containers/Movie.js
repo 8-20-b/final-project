@@ -3,23 +3,49 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { API_ROOT } from "../services/api-config";
 import Navigation from "../components/Navigation";
-
-
+import MovieTabs from "../components/MovieTabs";
 
 class Movie extends Component {
   state = {
     movie: {},
     favorite: false,
     later: false,
-    comments: []
+    comments: [
+      {
+        commentId: 1,
+        date: "2018-09-19 00:00:00",
+        profile: "https://avatars2.githubusercontent.com/u/15160756?s=460&v=4",
+        name: "Dioni M.",
+        comment:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
+      },
+      {
+        commentId: 1,
+        date: "2018-09-20 00:00:00",
+        profile: "https://avatars1.githubusercontent.com/u/31051973?s=460&v=4",
+        name: "Lisa E.",
+        comment:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
+      },
+      {
+        commentId: 1,
+        date: "2018-09-21 00:00:00",
+        profile: "https://avatars1.githubusercontent.com/u/36522327?s=460&v=4",
+        name: "Charsta Scott.",
+        comment:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
+      }
+    ],
+    cast: []
   };
 
   componentDidMount = () => {
     //this.fetchMovie();
-    this.searchMovies();
+    this.searchMovie();
+    this.searchCast();
   };
 
-  searchMovies = () => {
+  searchMovie = () => {
     axios
       .get(
         `https://api.themoviedb.org/3/movie/${
@@ -31,6 +57,15 @@ class Movie extends Component {
           .post(`${API_ROOT}/movies`, res.data)
           .then(movie => this.setState({ movie: movie.data }))
       );
+  };
+  searchCast = () => {
+    axios
+      .get(
+        `https://api.themoviedb.org/3/movie/${
+          this.props.match.params.movie_id
+        }/credits?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
+      )
+      .then(credits => this.setState({ cast: credits.data.cast }));
   };
 
   addToList = (type, movieId, userId) => {
@@ -70,7 +105,7 @@ class Movie extends Component {
               }}
               className="h-100 position-absolute"
             />
-            <div className="movie-card row">
+            <div className="movie-card">
               <div className="row mb-3">
                 <div className="col-md-3">
                   <img
@@ -81,8 +116,8 @@ class Movie extends Component {
                 </div>
                 <div className="col-md-9">
                   <h2>
-                    {movie.title}{" "}
-                    <span className="text-white-50">
+                    {movie.title}
+                    <span className="text-white-50 ml-3">
                       ({new Date(movie.releaseDate).getFullYear()})
                     </span>
                   </h2>
@@ -123,50 +158,16 @@ class Movie extends Component {
                       <i className="far fa-play-circle" /> Watch Trailer
                     </button>
                   </div>
-                  <h4>Overview</h4>
-                  <p>{movie.overview}</p>
+                  <h4 className="pt-3">Overview</h4>
+                  <p className="text-white-50">{movie.overview}</p>
                 </div>
               </div>
-              <div className="row">
+              <div className="row mt-5">
                 <div className="col-12">
-                  <ul className="nav nav-tabs" id="movieTabs" role="tablist">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link active"
-                        id="actors-tab"
-                        data-toggle="tab"
-                        href="#actors"
-                      >
-                        Actors
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        id="comments-tab"
-                        data-toggle="tab"
-                        href="#comments"
-                      >
-                        Comments
-                      </a>
-                    </li>
-                  </ul>
-                  <div className="tab-content" id="myTabContent">
-                    <div
-                      className="tab-pane fade show active"
-                      id="actors"
-                      role="tabpanel"
-                    >
-                      <h2>Actors List</h2>
-                    </div>
-                    <div
-                      className="tab-pane fade"
-                      id="comments"
-                      role="tabpanel"
-                    >
-                      <h2>Comments List</h2>
-                    </div>
-                  </div>
+                  <MovieTabs
+                    actors={this.state.cast}
+                    comments={this.state.comments}
+                  />
                 </div>
               </div>
             </div>

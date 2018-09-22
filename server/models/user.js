@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    profilePic: DataTypes.STRING
   });
 
   return Model;
