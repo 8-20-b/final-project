@@ -57,7 +57,7 @@ class Login extends Component {
     return (
       <div className="mt-5">
         <div className="text-center mb-5">
-          <h1 className="mb-4 text-danger">Sign In To Your Account</h1>
+          <h1 className="mb-4 text-light">Sign In To Your Account</h1>
           <p className="text-muted">
             Thank you for using our service. Please enter your credentials.
           </p>

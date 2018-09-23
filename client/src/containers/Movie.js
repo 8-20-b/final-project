@@ -1,55 +1,232 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import axios from "axios";
+import { API_ROOT } from "../services/api-config";
+import Navigation from "../components/Navigation";
+import MovieTabs from "../components/MovieTabs";
 
-export default class Movie extends Component {
+class Movie extends Component {
   state = {
-    movie: {}
-  };
-  componentDidMount = () => {
-    this.searchMovies();
+    movie: {},
+    favorite: false,
+    later: false,
+    comments: [
+      {
+        commentId: 1,
+        date: "2018-09-19 00:00:00",
+        profile: "https://avatars2.githubusercontent.com/u/15160756?s=460&v=4",
+        name: "Dioni M.",
+        comment:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
+      },
+      {
+        commentId: 1,
+        date: "2018-09-20 00:00:00",
+        profile: "https://avatars1.githubusercontent.com/u/31051973?s=460&v=4",
+        name: "Lisa E.",
+        comment:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
+      },
+      {
+        commentId: 1,
+        date: "2018-09-21 00:00:00",
+        profile: "https://avatars1.githubusercontent.com/u/36522327?s=460&v=4",
+        name: "Charsta Scott.",
+        comment:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
+      }
+    ],
+    cast: []
   };
 
-  searchMovies = () => {
+  componentDidMount = () => {
+    this.searchMovie();
+    this.searchCast();
+  };
+
+  searchMovie = () => {
+    axios
+      .get(
+        `${API_ROOT}/movies/${this.props.match.params.movie_id}?userId=${
+          this.props.userId
+        }`
+      )
+      .then(({ data: movie }) => {
+        if (movie.success) {
+          let favorite = false;
+          let later = false;
+          movie.result.Lists.map(list => {
+            if (list.type === "favorite") {
+              favorite = true;
+            }
+            if (list.type === "later") {
+              later = true;
+            }
+          });
+
+          this.setState({
+            movie: movie.result,
+            favorite,
+            later
+          });
+        } else {
+          axios
+            .get(
+              `https://api.themoviedb.org/3/movie/${
+                this.props.match.params.movie_id
+              }?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
+            )
+            .then(res =>
+              axios
+                .post(`${API_ROOT}/movies`, res.data)
+                .then(({ data: createdMovie }) =>
+                  this.setState({ movie: createdMovie })
+                )
+            );
+        }
+      })
+      .catch(err => console.log("Error", err));
+  };
+  searchCast = () => {
     axios
       .get(
         `https://api.themoviedb.org/3/movie/${
           this.props.match.params.movie_id
-        }?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
+        }/credits?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
       )
-      .then(res => this.setState({ movie: res.data }));
+      .then(credits => this.setState({ cast: credits.data.cast }));
+  };
+
+  addToList = (type, movieId, userId) => {
+    axios
+      .post(`${API_ROOT}/movies/list`, { type, movieId, userId })
+      .then(res => {
+        res.data.success && this.setState({ [type]: !this.state[type] });
+      })
+      .catch(() => console.log("Something went wrong."));
+  };
+  removeFromList = (type, movieId, userId) => {
+    axios
+      .delete(
+        `${API_ROOT}/movies/list?type=${type}&movieId=${movieId}&userId=${userId}`
+      )
+      .then(res => {
+        res.data.success && this.setState({ [type]: !this.state[type] });
+      })
+      .catch(() => console.log("Something went wrong."));
   };
 
   render() {
-    console.log("state", this.state.movie);
-    const { movie } = this.state;
+    // console.log("state", this.state);
+    const { movie, favorite, later } = this.state;
+    // console.log(favorite, later);
     return (
-      <div className="container">
-        <h1>Results page</h1>
+      <div className="container-fluid">
         <div className="row">
-          <div className="col-md-9 mx-auto">
-            <div className="results-list">
-              <div className="movie-item">
-                <div className="row mb-3">
-                  <div className="col-md-3">
-                    <img
-                      className="img-fluid"
-                      src={`https://image.tmdb.org/t/p/w370_and_h556_bestv2/${
-                        movie.poster_path
-                      }`}
-                      alt={movie.title}
-                    />
+          <Navigation query={this.props.match.params.query} />
+          <main
+            className="col-md-9 ml-sm-auto col-lg-10 pt-5 px-5"
+            style={{ height: "calc(100vh - 62px)" }}
+          >
+            <div
+              style={{
+                background: `url(https://image.tmdb.org/t/p/original/${
+                  movie.backdropPath
+                }) center center no-repeat`,
+                opacity: 0.1
+              }}
+              className="h-100 position-absolute"
+            />
+            <div className="movie-card">
+              <div className="row mb-3">
+                <div className="col-md-3">
+                  <img
+                    className="img-fluid"
+                    src={`https://image.tmdb.org/t/p/w300${movie.posterPath}`}
+                    alt={movie.title}
+                  />
+                </div>
+                <div className="col-md-9">
+                  <h2>
+                    {movie.title}
+                    <span className="text-white-50 ml-3">
+                      ({new Date(movie.releaseDate).getFullYear()})
+                    </span>
+                  </h2>
+                  <div className="my-3">
+                    <button
+                      className="btn btn-danger mr-3"
+                      onClick={() =>
+                        !this.state.favorite
+                          ? this.addToList(
+                              "favorite",
+                              movie.movieId,
+                              this.props.userId
+                            )
+                          : this.removeFromList(
+                              "favorite",
+                              movie.movieId,
+                              this.props.userId
+                            )
+                      }
+                    >
+                      {this.state.favorite ? (
+                        <i className="fas fa-heart" />
+                      ) : (
+                        <i className="far fa-heart" />
+                      )}
+                    </button>
+                    <button
+                      className="btn btn-danger mr-3"
+                      onClick={() =>
+                        !this.state.later
+                          ? this.addToList(
+                              "later",
+                              movie.movieId,
+                              this.props.userId
+                            )
+                          : this.removeFromList(
+                              "later",
+                              movie.movieId,
+                              this.props.userId
+                            )
+                      }
+                    >
+                      {this.state.later ? (
+                        <i className="fas fa-clock" />
+                      ) : (
+                        <i className="far fa-clock" />
+                      )}
+                    </button>
+                    <button className="btn btn-outline-danger">
+                      <i className="far fa-play-circle" /> Watch Trailer
+                    </button>
                   </div>
-                  <div className="col-md-9">
-                    <h2>{movie.title}</h2>
-                    <small className="text-muted">{movie.release_date}</small>
-                    <p>{movie.overview}</p>
-                  </div>
+                  <h4 className="pt-3">Overview</h4>
+                  <p className="text-white-50">{movie.overview}</p>
+                </div>
+              </div>
+              <div className="row mt-5">
+                <div className="col-12">
+                  <MovieTabs
+                    actors={this.state.cast}
+                    comments={this.state.comments}
+                  />
                 </div>
               </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  console.log("redux", state);
+  return {
+    userId: state.user.userId
+  };
+};
+
+export default connect(mapStateToProps)(Movie);

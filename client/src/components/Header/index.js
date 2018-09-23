@@ -5,8 +5,12 @@ import { logout } from "../../actions/user";
 import SearchForm from "../Forms/Search";
 
 const Header = ({ brand, isAuth, logout }) => (
-  <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <NavLink className="navbar-brand" to="/">
+  <nav className="navbar navbar-expand-md navbar-dark bg-danger m-0 p-0">
+    <NavLink
+      className="col-md-2 col-sm-3 mr-5 navbar-brand py-3 text-center"
+      style={{ backgroundColor: "rgba(0,0,0,.1)" }}
+      to="/"
+    >
       {brand}
     </NavLink>
     <button
@@ -19,42 +23,25 @@ const Header = ({ brand, isAuth, logout }) => (
     </button>
     <div className="collapse navbar-collapse" id="navbarCollapse">
       <SearchForm />
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <NavLink className="nav-link" exact to="/">
-            Discover
-          </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/movies">
-            Movies
-          </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/shows">
-            TV Shows
-          </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link" to="/actors">
-            Actors
-          </NavLink>
-        </li>
+      <ul className="navbar-nav ml-auto mr-3">
         {isAuth ? (
           <li className="nav-item">
-            <button onClick={() => logout()} className="btn btn-danger ml-3">
+            <button
+              onClick={() => logout()}
+              className="btn btn-outline-light ml-3"
+            >
               Logout
             </button>
           </li>
         ) : (
           <React.Fragment>
             <li className="nav-item">
-              <NavLink to="/login" className="btn btn-outline-danger ml-3">
+              <NavLink to="/login" className="btn btn-outline-light ml-3">
                 Log In
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/register" className="btn btn-danger ml-3">
+              <NavLink to="/register" className="btn btn-light ml-3">
                 Sign Up
               </NavLink>
             </li>

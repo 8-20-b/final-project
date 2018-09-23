@@ -2,12 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define("Movie", {
     movieId: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    imdbId: {
-      type: DataTypes.STRING,
-      validate: { len: 9 }
+      primaryKey: true,
+      allowNull: false
     },
     title: {
       type: DataTypes.STRING(100),
@@ -17,13 +13,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT
     },
     userRating: {
-      type: DataTypes.INTEGER,
-      allowNull: true
+      type: DataTypes.FLOAT(1, 1)
     },
-    poster_url: {
+    voteCount: {
+      type: DataTypes.INTEGER
+    },
+    posterPath: {
       type: DataTypes.STRING
     },
-    release_date: {
+    backdropPath: {
+      type: DataTypes.STRING
+    },
+    releaseDate: {
       type: DataTypes.DATEONLY
     },
     length: {
@@ -35,13 +36,16 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Model.associate = function(models) {
-    this.Movie = this.belongsTo(models.Genre, {
+    this.Genres = this.belongsToMany(models.Genre, {
+      through: "MovieGenres",
       foreignKey: "genreId"
     });
-    this.Movie = this.belongsTo(models.Actor, {
-      foreignKey: "actorId"
+    this.Movie = this.hasMany(models.List, {
+      foreignKey: "movieId"
     });
   };
+
+  //sequelize.sync({ force: true });
 
   return Model;
 };

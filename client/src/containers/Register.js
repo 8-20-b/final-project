@@ -54,7 +54,7 @@ class Register extends Component {
     return (
       <div className="mt-5">
         <div className="text-center mb-5">
-          <h1 className="mb-4 text-danger">Sign Up... It's Free!</h1>
+          <h1 className="mb-4 text-light">Sign Up... It's Free!</h1>
           <p className="text-muted">
             Easily sign up to our community and enjoy multiple benefits we offer
             for members.
