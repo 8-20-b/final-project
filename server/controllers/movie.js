@@ -5,6 +5,7 @@ const Op = Sequelize.Op;
 const Movie = require("../models").Movie;
 const Genre = require("../models").Genre;
 const List = require("../models").List;
+const Comments = require("../models").Comments;
 
 const getAll = (req, res) => {
   console.log("query:", req.query.query);
@@ -123,4 +124,19 @@ const removeFromList = (req, res) => {
     .catch(() => res.json({ success: false }));
 };
 
-module.exports = { create, getAll, getOne, addToList, removeFromList };
+const addComments = (req, res) => {
+  console.log("ADDED", req.query);
+  const { type, movieId, userId } = req.body;
+  Comments.create({ type, movieId, userId })
+    .then(() => res.json({ success: true }))
+    .catch(() => res.json({ success: false }));
+};
+
+module.exports = {
+  create,
+  getAll,
+  getOne,
+  addToList,
+  removeFromList,
+  addComments
+};

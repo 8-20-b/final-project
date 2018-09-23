@@ -37,5 +37,6 @@ router.get("/movies/:id", movieCtrl.getOne);
 router.post("/movies", movieCtrl.create);
 router.post("/movies/list", movieCtrl.addToList);
 router.delete("/movies/list", movieCtrl.removeFromList);
+router.post("/movies/comments", movieCtrl.addComments);
 
 module.exports = router;
