@@ -5,6 +5,7 @@ const Op = Sequelize.Op;
 const Movie = require("../models").Movie;
 const Genre = require("../models").Genre;
 const List = require("../models").List;
+const Comments = require("../models").Comments;
 
 const getAll = (req, res) => {
   console.log("query:", req.query.query);
@@ -42,7 +43,7 @@ const getAll = (req, res) => {
 
   Movie.findAll({
     where,
-    limit: 10,
+    limit: 24,
     order,
     include
   }).then(movies => res.json(movies));
@@ -123,4 +124,10 @@ const removeFromList = (req, res) => {
     .catch(() => res.json({ success: false }));
 };
 
-module.exports = { create, getAll, getOne, addToList, removeFromList };
+module.exports = {
+  create,
+  getAll,
+  getOne,
+  addToList,
+  removeFromList
+};
