@@ -6,7 +6,24 @@ const getAll = (req, res) => {
     where: { movieId: req.params.movie_id },
     include: [{ model: User }]
   })
-    .then(comments => res.json(comments))
+    .then(comments => {
+      const output = comments.map(comment => {
+        //tidy up the user data
+        return Object.assign(
+          {},
+          {
+            userId: comment.User.userId,
+            firstName: comment.User.firstName,
+            lastName: comment.User.lastName,
+            profile: comment.User.profilePic,
+            createdAt: comment.createdAt,
+            comment: comment.comment,
+            commentId: comment.commentId
+          }
+        );
+      });
+      res.json(output);
+    })
     .catch(err => console.log({ success: false, message: err }));
 };
 

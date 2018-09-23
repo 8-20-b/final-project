@@ -123,10 +123,6 @@ class Movie extends Component {
   };
 
   addComment = ({ comment }) => {
-    console.log("comment", comment);
-    console.log("movieId", this.props.match.params.movie_id);
-    console.log("userId", this.props.userId);
-
     axios
       .post(`${API_ROOT}/comments`, {
         comment,
@@ -136,6 +132,12 @@ class Movie extends Component {
       .then(
         ({ data: newComment }) => newComment.success && this.fetchComments()
       );
+  };
+
+  removeComment = commentId => {
+    axios
+      .delete(`${API_ROOT}/comments/${commentId}`)
+      .then(({ data: comment }) => comment.success && this.fetchComments());
   };
 
   render() {
@@ -238,6 +240,7 @@ class Movie extends Component {
                     actors={this.state.cast}
                     comments={this.state.comments}
                     addComment={this.addComment}
+                    removeComment={this.removeComment}
                   />
                 </div>
               </div>
