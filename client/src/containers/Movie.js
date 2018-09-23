@@ -12,32 +12,7 @@ class Movie extends Component {
     trailer: "",
     favorite: false,
     later: false,
-    comments: [
-      {
-        commentId: 1,
-        date: "2018-09-19 00:00:00",
-        profile: "https://avatars2.githubusercontent.com/u/15160756?s=460&v=4",
-        name: "Dioni M.",
-        comment:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
-      },
-      {
-        commentId: 1,
-        date: "2018-09-20 00:00:00",
-        profile: "https://avatars1.githubusercontent.com/u/31051973?s=460&v=4",
-        name: "Lisa E.",
-        comment:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
-      },
-      {
-        commentId: 1,
-        date: "2018-09-21 00:00:00",
-        profile: "https://avatars1.githubusercontent.com/u/36522327?s=460&v=4",
-        name: "Charsta Scott.",
-        comment:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, delectus. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae consequuntur vel accusamus explicabo, ipsum id."
-      }
-    ],
+    comments: [],
     cast: []
   };
 
@@ -45,6 +20,7 @@ class Movie extends Component {
     this.searchMovie();
     this.searchCast();
     this.searchTrailer();
+    this.fetchComments();
   };
 
   searchMovie = () => {
@@ -128,6 +104,7 @@ class Movie extends Component {
       })
       .catch(() => console.log("Something went wrong."));
   };
+
   removeFromList = (type, movieId, userId) => {
     axios
       .delete(
@@ -137,6 +114,12 @@ class Movie extends Component {
         res.data.success && this.setState({ [type]: !this.state[type] });
       })
       .catch(() => console.log("Something went wrong."));
+  };
+
+  fetchComments = () => {
+    axios
+      .get(`${API_ROOT}/comments/${this.props.match.params.movie_id}`)
+      .then(({ data: comments }) => this.setState({ comments }));
   };
 
   render() {

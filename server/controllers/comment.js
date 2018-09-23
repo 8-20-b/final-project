@@ -1,7 +1,11 @@
 const Comment = require("../models").Comment;
+const User = require("../models").User;
 
 const getAll = (req, res) => {
-  Comment.findAll({ where: { movieId: req.params.movie_id } })
+  Comment.findAll({
+    where: { movieId: req.params.movie_id },
+    include: [{ model: User }]
+  })
     .then(comments => res.json(comments))
     .catch(err => console.log({ success: false, message: err }));
 };
