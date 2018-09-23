@@ -1,7 +1,7 @@
 import React from "react";
 import CommentsList from "../Comments";
 
-export default ({ actors, comments }) => {
+export default ({ actors, comments, addComment, removeComment }) => {
   return (
     <div>
       <ul className="nav nav-tabs" id="movieTabs" role="tablist">
@@ -14,7 +14,7 @@ export default ({ actors, comments }) => {
           >
             Actors
           </a>
-        </li>{" "}
+        </li>
         <li className="nav-item">
           <a
             className="nav-link "
@@ -28,7 +28,11 @@ export default ({ actors, comments }) => {
       </ul>
       <div className="tab-content" id="myTabContent">
         <div className="tab-pane fade pt-4" id="comments" role="tabpanel">
-          <CommentsList dataSource={comments} />
+          <CommentsList
+            addComment={addComment}
+            removeComment={removeComment}
+            dataSource={comments}
+          />
         </div>
         <div
           className="tab-pane fade show active pt-4"
