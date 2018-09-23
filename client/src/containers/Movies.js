@@ -1,17 +1,22 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
 import { API_ROOT } from "../services/api-config";
 import Navigation from "../components/Navigation";
 import MoviesList from "../components/MoviesList";
 
-export default class Catalog extends Component {
+class Movies extends Component {
   state = {
     movies: []
   };
 
   componentDidMount = () => {
     axios
-      .get(`${API_ROOT}/movies?query=${this.props.match.params.query}`)
+      .get(
+        `${API_ROOT}/movies?query=${this.props.match.params.query}&userId=${
+          this.props.userId
+        }`
+      )
       .then(({ data: movies }) => this.setState({ movies }));
   };
 
@@ -37,3 +42,11 @@ export default class Catalog extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    userId: state.user.userId
+  };
+};
+
+export default connect(mapStateToProps)(Movies);

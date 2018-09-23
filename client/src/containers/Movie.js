@@ -47,15 +47,45 @@ class Movie extends Component {
   searchMovie = () => {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${
-          this.props.match.params.movie_id
-        }?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
+        `${API_ROOT}/movies/${this.props.match.params.movie_id}?userId=${
+          this.props.userId
+        }`
       )
-      .then(res =>
-        axios
-          .post(`${API_ROOT}/movies`, res.data)
-          .then(movie => this.setState({ movie: movie.data }))
-      );
+      .then(({ data: movie }) => {
+        if (movie.success) {
+          let favorite = false;
+          let later = false;
+          movie.result.Lists.map(list => {
+            if (list.type === "favorite") {
+              favorite = true;
+            }
+            if (list.type === "later") {
+              later = true;
+            }
+          });
+
+          this.setState({
+            movie: movie.result,
+            favorite,
+            later
+          });
+        } else {
+          axios
+            .get(
+              `https://api.themoviedb.org/3/movie/${
+                this.props.match.params.movie_id
+              }?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
+            )
+            .then(res =>
+              axios
+                .post(`${API_ROOT}/movies`, res.data)
+                .then(({ data: createdMovie }) =>
+                  this.setState({ movie: createdMovie })
+                )
+            );
+        }
+      })
+      .catch(err => console.log("Error", err));
   };
   searchCast = () => {
     axios
@@ -71,13 +101,25 @@ class Movie extends Component {
     axios
       .post(`${API_ROOT}/movies/list`, { type, movieId, userId })
       .then(res => {
-        res.data.success && this.setState({ [type]: true });
+        res.data.success && this.setState({ [type]: !this.state[type] });
+      })
+      .catch(() => console.log("Something went wrong."));
+  };
+  removeFromList = (type, movieId, userId) => {
+    axios
+      .delete(
+        `${API_ROOT}/movies/list?type=${type}&movieId=${movieId}&userId=${userId}`
+      )
+      .then(res => {
+        res.data.success && this.setState({ [type]: !this.state[type] });
       })
       .catch(() => console.log("Something went wrong."));
   };
 
   render() {
-    const { movie } = this.state;
+    // console.log("state", this.state);
+    const { movie, favorite, later } = this.state;
+    // console.log(favorite, later);
     return (
       <div className="container-fluid">
         <div className="row">
@@ -115,11 +157,17 @@ class Movie extends Component {
                     <button
                       className="btn btn-danger mr-3"
                       onClick={() =>
-                        this.addToList(
-                          "favorite",
-                          movie.movieId,
-                          this.props.userId
-                        )
+                        !this.state.favorite
+                          ? this.addToList(
+                              "favorite",
+                              movie.movieId,
+                              this.props.userId
+                            )
+                          : this.removeFromList(
+                              "favorite",
+                              movie.movieId,
+                              this.props.userId
+                            )
                       }
                     >
                       {this.state.favorite ? (
@@ -131,14 +179,20 @@ class Movie extends Component {
                     <button
                       className="btn btn-danger mr-3"
                       onClick={() =>
-                        this.addToList(
-                          "later",
-                          movie.movieId,
-                          this.props.userId
-                        )
+                        !this.state.later
+                          ? this.addToList(
+                              "later",
+                              movie.movieId,
+                              this.props.userId
+                            )
+                          : this.removeFromList(
+                              "later",
+                              movie.movieId,
+                              this.props.userId
+                            )
                       }
                     >
-                      {this.state.favorite ? (
+                      {this.state.later ? (
                         <i className="fas fa-clock" />
                       ) : (
                         <i className="far fa-clock" />

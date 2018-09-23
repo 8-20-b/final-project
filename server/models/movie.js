@@ -40,6 +40,9 @@ module.exports = (sequelize, DataTypes) => {
       through: "MovieGenres",
       foreignKey: "genreId"
     });
+    this.Movie = this.hasMany(models.List, {
+      foreignKey: "movieId"
+    });
   };
 
   //sequelize.sync({ force: true });
