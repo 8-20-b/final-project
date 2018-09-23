@@ -43,7 +43,7 @@ const getAll = (req, res) => {
 
   Movie.findAll({
     where,
-    limit: 10,
+    limit: 24,
     order,
     include
   }).then(movies => res.json(movies));
@@ -124,19 +124,10 @@ const removeFromList = (req, res) => {
     .catch(() => res.json({ success: false }));
 };
 
-const addComments = (req, res) => {
-  console.log("ADDED", req.query);
-  const { type, movieId, userId } = req.body;
-  Comments.create({ type, movieId, userId })
-    .then(() => res.json({ success: true }))
-    .catch(() => res.json({ success: false }));
-};
-
 module.exports = {
   create,
   getAll,
   getOne,
   addToList,
-  removeFromList,
-  addComments
+  removeFromList
 };

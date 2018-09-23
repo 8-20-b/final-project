@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define("Comments", {
+  var Model = sequelize.define("Comment", {
     commentId: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    type: {
-      type: DataTypes.STRING,
+    comment: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     userId: {
@@ -21,14 +21,14 @@ module.exports = (sequelize, DataTypes) => {
 
   Model.associate = function(models) {
     this.Comment = this.belongsTo(models.Movie, {
-      foreignKey: "commentId"
+      foreignKey: "movieId"
     });
     this.Comment = this.belongsTo(models.User, {
       foreignKey: "userId"
     });
   };
 
-  // sequelize.sync({ force: true });
+  //Model.sync({ force: true });
 
   return Model;
 };
