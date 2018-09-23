@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+// import movieTrailer from "movie-trailer";
 import axios from "axios";
 import { API_ROOT } from "../services/api-config";
 import Navigation from "../components/Navigation";
@@ -8,6 +9,7 @@ import MovieTabs from "../components/MovieTabs";
 class Movie extends Component {
   state = {
     movie: {},
+    trailer: "",
     favorite: false,
     later: false,
     comments: [
@@ -42,6 +44,7 @@ class Movie extends Component {
   componentDidMount = () => {
     this.searchMovie();
     this.searchCast();
+    this.searchTrailer();
   };
 
   searchMovie = () => {
@@ -53,16 +56,19 @@ class Movie extends Component {
       )
       .then(({ data: movie }) => {
         if (movie.success) {
-          let favorite = false;
-          let later = false;
+          let lists = {};
           movie.result.Lists.map(list => {
             if (list.type === "favorite") {
-              favorite = true;
+              lists.favorite = true;
             }
             if (list.type === "later") {
-              later = true;
+              lists.later = true;
             }
+
+            return lists;
           });
+
+          const { later, favorite } = lists;
 
           this.setState({
             movie: movie.result,
@@ -87,6 +93,7 @@ class Movie extends Component {
       })
       .catch(err => console.log("Error", err));
   };
+
   searchCast = () => {
     axios
       .get(
@@ -95,6 +102,22 @@ class Movie extends Component {
         }/credits?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
       )
       .then(credits => this.setState({ cast: credits.data.cast }));
+  };
+
+  searchTrailer = () => {
+    axios
+      .get(
+        `https://api.themoviedb.org/3/movie/${
+          this.props.match.params.movie_id
+        }/videos?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
+      )
+      .then(videos =>
+        this.setState({
+          trailer: `https://www.youtube.com/watch?v=${
+            videos.data.results[0].key
+          }`
+        })
+      );
   };
 
   addToList = (type, movieId, userId) => {
@@ -117,9 +140,8 @@ class Movie extends Component {
   };
 
   render() {
-    // console.log("state", this.state);
-    const { movie, favorite, later } = this.state;
-    // console.log(favorite, later);
+    const { movie, trailer } = this.state;
+    console.log("trailer", trailer);
     return (
       <div className="container-fluid">
         <div className="row">
@@ -198,11 +220,17 @@ class Movie extends Component {
                         <i className="far fa-clock" />
                       )}
                     </button>
-                    <button className="btn btn-outline-danger">
-                      <i className="far fa-play-circle" /> Watch Trailer
-                    </button>
+                    {this.state.trailer && (
+                      <a
+                        href={this.state.trailer}
+                        data-fancybox
+                        className="btn btn-outline-light"
+                      >
+                        <i className="far fa-play-circle" /> Watch Trailer
+                      </a>
+                    )}
                   </div>
-                  <h4 className="pt-3">Overview</h4>
+                  <h5 className="pt-3">Overview</h5>
                   <p className="text-white-50">{movie.overview}</p>
                 </div>
               </div>
