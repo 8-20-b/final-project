@@ -122,9 +122,24 @@ class Movie extends Component {
       .then(({ data: comments }) => this.setState({ comments }));
   };
 
+  addComment = ({ comment }) => {
+    console.log("comment", comment);
+    console.log("movieId", this.props.match.params.movie_id);
+    console.log("userId", this.props.userId);
+
+    axios
+      .post(`${API_ROOT}/comments`, {
+        comment,
+        movieId: this.props.match.params.movie_id,
+        userId: this.props.userId
+      })
+      .then(
+        ({ data: newComment }) => newComment.success && this.fetchComments()
+      );
+  };
+
   render() {
-    const { movie, trailer } = this.state;
-    console.log("trailer", trailer);
+    const { movie } = this.state;
     return (
       <div className="container-fluid">
         <div className="row">
@@ -222,6 +237,7 @@ class Movie extends Component {
                   <MovieTabs
                     actors={this.state.cast}
                     comments={this.state.comments}
+                    addComment={this.addComment}
                   />
                 </div>
               </div>
@@ -234,7 +250,7 @@ class Movie extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("redux", state);
+  //console.log("redux", state);
   return {
     userId: state.user.userId
   };

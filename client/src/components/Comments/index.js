@@ -7,7 +7,8 @@ class Comments extends Component {
     formOpen: false
   };
   render() {
-    const { dataSource } = this.props;
+    const { dataSource, addComment } = this.props;
+
     return (
       <div className="">
         <div className="text-right mb-3">
@@ -17,7 +18,7 @@ class Comments extends Component {
           >
             {this.state.formOpen ? "Cancel" : "Add Comment"}
           </button>
-          {this.state.formOpen && <AddComment />}
+          {this.state.formOpen && <AddComment onSubmit={addComment} />}
         </div>
         {dataSource.map((comment, key) => (
           <Comment key={key} comment={comment} />
