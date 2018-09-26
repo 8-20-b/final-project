@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { fetchMovie } from "../../actions/movie";
 import axios from "axios";
-import { API_ROOT } from "../../services/api-config";
 
 class Search extends Component {
   state = {
@@ -27,15 +28,8 @@ class Search extends Component {
   };
 
   goToMovie = movie_id => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${movie_id}?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
-      )
-      .then(res =>
-        axios
-          .post(`${API_ROOT}/movies`, res.data)
-          .then(movie => this.setState({ results: [] }))
-      );
+    this.props.fetchMovie(movie_id, this.props.userId);
+    this.setState({ results: [] });
   };
 
   componentDidMount = () => {};
@@ -85,4 +79,13 @@ class Search extends Component {
   }
 }
 
-export default Search;
+const mapStateToProps = state => {
+  return {
+    userId: state.user.userId
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchMovie }
+)(Search);

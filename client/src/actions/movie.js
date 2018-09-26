@@ -61,9 +61,12 @@ export const fetchMovies = (query, userId) => dispatch => {
 export const fetchMovie = (movieId, userId) => dispatch => {
   dispatch(loadingMovie(true));
   api.movie.getMovie(movieId, userId).then(movie => {
-    for (let list of movie.Lists) {
-      if (list.type === "favorite") dispatch(favorite(true));
-      if (list.type === "later") dispatch(watchLater(true));
+    console.log("getMovie", movie);
+    if (movie.Lists) {
+      for (let list of movie.Lists) {
+        if (list.type === "favorite") dispatch(favorite(true));
+        if (list.type === "later") dispatch(watchLater(true));
+      }
     }
     dispatch(fetchedMovie(movie));
     dispatch(loadingMovie(false));

@@ -11,10 +11,12 @@ export default {
           return res.data.results;
         }),
     getMovie: (movieId, userId) =>
-      axios.get(`${API_ROOT}/movies/${movieId}?userId=${userId}`).then(res => {
-        if (!res.data.success) throw Error(res.data.message);
-        return res.data.result;
-      }),
+      axios
+        .post(`${API_ROOT}/movies/?movieId=${movieId}&userId=${userId}`)
+        .then(res => {
+          if (!res.data.success) throw Error(res.data.message);
+          return res.data.result;
+        }),
     addToList: (type, movieId, userId) =>
       axios
         .post(`${API_ROOT}/movies/list`, { type, movieId, userId })
