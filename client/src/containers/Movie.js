@@ -43,13 +43,15 @@ class Movie extends Component {
           this.props.match.params.movie_id
         }/videos?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
       )
-      .then(videos =>
-        this.setState({
-          trailer: `https://www.youtube.com/watch?v=${
-            videos.data.results[0].key
-          }`
-        })
-      );
+      .then(videos => {
+        if (Object.keys(videos.data.results).length > 0) {
+          this.setState({
+            trailer: `https://www.youtube.com/watch?v=${
+              videos.data.results[0].key
+            }`
+          });
+        }
+      });
   };
 
   fetchComments = () => {

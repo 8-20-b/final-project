@@ -1,3 +1,4 @@
+const axios = require("axios");
 const Sequelize = require("sequelize");
 
 const Op = Sequelize.Op;
@@ -51,66 +52,51 @@ const getAll = (req, res) => {
     );
 };
 
-const getOne = (req, res) => {
-  console.log("req.query.userId", req.query.userId);
+const create = (req, res) => {
   let include = [];
   if (req.query.userId)
     include = [
       {
         model: List,
-        where: { movieId: req.params.id, userId: req.query.userId },
+        where: { movieId: req.query.movieId, userId: req.query.userId },
         paranoid: false,
         required: false
       }
     ];
-  Movie.findOne({
-    where: { movieId: req.params.id },
-    include
-  }).then(movie => {
-    if (movie) {
-      res.json({ success: true, result: movie });
-    } else {
-      res.json({ success: false, message: "No movies found with that ID." });
+
+  Movie.findOne({ where: { movieId: req.query.movieId }, include }).then(
+    movie => {
+      if (movie) {
+        res.json({ success: true, result: movie });
+      } else {
+        axios
+          .get(
+            `https://api.themoviedb.org/3/movie/${req.query.movieId}?api_key=${
+              process.env.IMDB_KEY
+            }`
+          )
+          .then(({ data: imdb }) => {
+            console.log("IMDB:", imdb);
+            const newMovie = {
+              movieId: req.query.movieId,
+              backdropPath: imdb.backdrop_path,
+              posterPath: imdb.poster_path,
+              overview: imdb.overview,
+              releaseDate: imdb.release_date,
+              length: imdb.runtime,
+              title: imdb.title,
+              userRating: imdb.vote_average,
+              voteCount: imdb.vote_count
+              // Genres: imdb.genres
+            };
+
+            Movie.create(newMovie).then(createdMovie =>
+              res.json({ success: true, result: createdMovie })
+            );
+          });
+      }
     }
-  });
-};
-
-const create = (req, res) => {
-  const {
-    id,
-    backdrop_path,
-    poster_path,
-    overview,
-    release_date,
-    runtime,
-    title,
-    vote_average,
-    vote_count,
-    genres
-  } = req.body;
-
-  const newMovie = {
-    movieId: id,
-    backdropPath: backdrop_path,
-    posterPath: poster_path,
-    overview,
-    releaseDate: release_date,
-    length: runtime,
-    title,
-    userRating: vote_average,
-    voteCount: vote_count,
-    Genres: genres
-  };
-
-  Movie.findOne({ where: { movieId: id } }).then(movie => {
-    if (movie) {
-      res.json({ success: true, movie });
-    } else {
-      Movie.create(newMovie).then(createdMovie =>
-        res.json({ success: true, movie: createdMovie })
-      );
-    }
-  });
+  );
 };
 
 const addToList = (req, res) => {
@@ -136,7 +122,6 @@ const removeFromList = (req, res) => {
 module.exports = {
   create,
   getAll,
-  getOne,
   addToList,
   removeFromList
 };
