@@ -10,7 +10,7 @@ const Navigation = ({ query, isAuth }) => (
         <li className="nav-item">
           <NavLink
             className="nav-link d-flex justify-content-between"
-            to="/movies/recent"
+            to="/movies/recently-added"
           >
             Recently Added
             {query === "recent" && <i className="fas fa-chevron-right mt-1" />}

@@ -3,13 +3,9 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 const Movie = require("../models").Movie;
-const Genre = require("../models").Genre;
 const List = require("../models").List;
-const Comments = require("../models").Comments;
 
 const getAll = (req, res) => {
-  console.log("query:", req.query.query);
-
   const where = {};
   let order = [];
   let include = [];
@@ -29,7 +25,7 @@ const getAll = (req, res) => {
     include = [
       {
         model: List,
-        where: { type: "favorite", userId: 1 }
+        where: { type: "favorite", userId: req.query.userId }
       }
     ];
   } else if (req.query.query === "watch-later") {
@@ -39,6 +35,8 @@ const getAll = (req, res) => {
         where: { type: "later", userId: req.query.userId }
       }
     ];
+  } else {
+    order = [["createdAt", "DESC"]];
   }
 
   Movie.findAll({
@@ -46,7 +44,11 @@ const getAll = (req, res) => {
     limit: 24,
     order,
     include
-  }).then(movies => res.json(movies));
+  })
+    .then(movies => res.json({ success: true, results: movies }))
+    .catch(err =>
+      res.json({ success: false, message: "Something went wrong:", err })
+    );
 };
 
 const getOne = (req, res) => {
@@ -102,25 +104,32 @@ const create = (req, res) => {
 
   Movie.findOne({ where: { movieId: id } }).then(movie => {
     if (movie) {
-      res.json(movie);
+      res.json({ success: true, movie });
     } else {
-      Movie.create(newMovie).then(createdMovie => res.json(createdMovie));
+      Movie.create(newMovie).then(createdMovie =>
+        res.json({ success: true, movie: createdMovie })
+      );
     }
   });
 };
 
 const addToList = (req, res) => {
   const { type, movieId, userId } = req.body;
-  List.create({ type, movieId, userId })
-    .then(() => res.json({ success: true }))
-    .catch(() => res.json({ success: false }));
+  List.findOne({ where: { type, movieId, userId } }).then(list => {
+    if (!list) {
+      List.create({ type, movieId, userId })
+        .then(() => res.json({ success: true }))
+        .catch(() => res.json({ success: false }));
+    } else {
+      res.json({ success: true });
+    }
+  });
 };
 
 const removeFromList = (req, res) => {
-  console.log("DELETE", req.query);
   const { type, movieId, userId } = req.query;
   List.destroy({ where: { type, movieId, userId } })
-    .then(data => res.json({ success: true, data }))
+    .then(() => res.json({ success: true }))
     .catch(() => res.json({ success: false }));
 };
 

@@ -36,7 +36,6 @@ class Search extends Component {
           .post(`${API_ROOT}/movies`, res.data)
           .then(movie => this.setState({ results: [] }))
       );
-    console.log("props", this.props);
   };
 
   componentDidMount = () => {};

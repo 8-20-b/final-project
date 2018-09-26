@@ -3,10 +3,35 @@ import { API_ROOT } from "./api-config";
 
 export default {
   movie: {
-    results: credentials =>
-      axios.post(`${API_ROOT}/auth`, credentials).then(res => {
+    getMovies: (query, userId) =>
+      axios
+        .get(`${API_ROOT}/movies?query=${query}&userId=${userId}`)
+        .then(res => {
+          if (!res.data.success) throw Error(res.data.message);
+          return res.data.results;
+        }),
+    getMovie: (movieId, userId) =>
+      axios.get(`${API_ROOT}/movies/${movieId}?userId=${userId}`).then(res => {
         if (!res.data.success) throw Error(res.data.message);
-        return res.data;
-      })
+        return res.data.result;
+      }),
+    addToList: (type, movieId, userId) =>
+      axios
+        .post(`${API_ROOT}/movies/list`, { type, movieId, userId })
+        .then(res => {
+          if (!res.data.success) throw Error(res.data.message);
+
+          return res.data;
+        }),
+    removeFromList: (type, movieId, userId) =>
+      axios
+        .delete(
+          `${API_ROOT}/movies/list?type=${type}&movieId=${movieId}&userId=${userId}`
+        )
+        .then(res => {
+          if (!res.data.success) throw Error(res.data.message);
+
+          return res.data;
+        })
   }
 };
