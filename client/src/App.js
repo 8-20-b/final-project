@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Header from "./components/Header";
-import { Results, Movie, Movies, Login, Register } from "./containers/";
+import { Movie, Movies, Login, Register } from "./containers/";
 
 import "./App.css";
 
@@ -16,7 +16,6 @@ const App = () => (
       />
       <Route exact path="/movies/:query" component={Movies} />
       <Route exact path="/movie/:movie_id" component={Movie} />
-      <Route exact path="/results/:query" component={Results} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/register" component={Register} />
     </React.Fragment>

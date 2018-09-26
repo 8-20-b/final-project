@@ -11,10 +11,7 @@ class Movies extends Component {
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.match.params.query !== this.props.match.params.query) {
-      this.props.fetchMovies(
-        nextProps.match.params.query,
-        this.props.userId || 0
-      );
+      this.props.fetchMovies(nextProps.match.params.query, this.props.userId);
     }
   };
 

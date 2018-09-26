@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import movieTrailer from "movie-trailer";
+import { fetchMovie, addToList, removeFromList } from "../actions/movie";
 import axios from "axios";
 import { API_ROOT } from "../services/api-config";
 import Navigation from "../components/Navigation";
@@ -8,66 +8,22 @@ import MovieTabs from "../components/MovieTabs";
 
 class Movie extends Component {
   state = {
-    movie: {},
     trailer: "",
-    favorite: false,
-    later: false,
     comments: [],
     cast: []
   };
 
   componentDidMount = () => {
-    this.searchMovie();
+    this.props.fetchMovie(this.props.match.params.movie_id, this.props.userId);
     this.searchCast();
     this.searchTrailer();
     this.fetchComments();
   };
 
-  searchMovie = () => {
-    axios
-      .get(
-        `${API_ROOT}/movies/${this.props.match.params.movie_id}?userId=${
-          this.props.userId
-        }`
-      )
-      .then(({ data: movie }) => {
-        if (movie.success) {
-          let lists = {};
-          movie.result.Lists.map(list => {
-            if (list.type === "favorite") {
-              lists.favorite = true;
-            }
-            if (list.type === "later") {
-              lists.later = true;
-            }
-
-            return lists;
-          });
-
-          const { later, favorite } = lists;
-
-          this.setState({
-            movie: movie.result,
-            favorite,
-            later
-          });
-        } else {
-          axios
-            .get(
-              `https://api.themoviedb.org/3/movie/${
-                this.props.match.params.movie_id
-              }?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
-            )
-            .then(res =>
-              axios
-                .post(`${API_ROOT}/movies`, res.data)
-                .then(({ data: createdMovie }) =>
-                  this.setState({ movie: createdMovie })
-                )
-            );
-        }
-      })
-      .catch(err => console.log("Error", err));
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.match.params.movie_id !== this.props.match.params.movie_id) {
+      this.props.fetchMovie(nextProps.match.params.movie_id, this.props.userId);
+    }
   };
 
   searchCast = () => {
@@ -96,26 +52,6 @@ class Movie extends Component {
       );
   };
 
-  addToList = (type, movieId, userId) => {
-    axios
-      .post(`${API_ROOT}/movies/list`, { type, movieId, userId })
-      .then(res => {
-        res.data.success && this.setState({ [type]: !this.state[type] });
-      })
-      .catch(() => console.log("Something went wrong."));
-  };
-
-  removeFromList = (type, movieId, userId) => {
-    axios
-      .delete(
-        `${API_ROOT}/movies/list?type=${type}&movieId=${movieId}&userId=${userId}`
-      )
-      .then(res => {
-        res.data.success && this.setState({ [type]: !this.state[type] });
-      })
-      .catch(() => console.log("Something went wrong."));
-  };
-
   fetchComments = () => {
     axios
       .get(`${API_ROOT}/comments/${this.props.match.params.movie_id}`)
@@ -141,7 +77,7 @@ class Movie extends Component {
   };
 
   render() {
-    const { movie } = this.state;
+    const { movie } = this.props;
     return (
       <div className="container-fluid">
         <div className="row">
@@ -179,20 +115,20 @@ class Movie extends Component {
                     <button
                       className="btn btn-danger mr-3"
                       onClick={() =>
-                        !this.state.favorite
-                          ? this.addToList(
+                        !this.props.favorite
+                          ? this.props.addToList(
                               "favorite",
                               movie.movieId,
                               this.props.userId
                             )
-                          : this.removeFromList(
+                          : this.props.removeFromList(
                               "favorite",
                               movie.movieId,
                               this.props.userId
                             )
                       }
                     >
-                      {this.state.favorite ? (
+                      {this.props.favorite ? (
                         <i className="fas fa-heart" />
                       ) : (
                         <i className="far fa-heart" />
@@ -201,20 +137,20 @@ class Movie extends Component {
                     <button
                       className="btn btn-danger mr-3"
                       onClick={() =>
-                        !this.state.later
-                          ? this.addToList(
+                        !this.props.watchLater
+                          ? this.props.addToList(
                               "later",
                               movie.movieId,
                               this.props.userId
                             )
-                          : this.removeFromList(
+                          : this.props.removeFromList(
                               "later",
                               movie.movieId,
                               this.props.userId
                             )
                       }
                     >
-                      {this.state.later ? (
+                      {this.props.watchLater ? (
                         <i className="fas fa-clock" />
                       ) : (
                         <i className="far fa-clock" />
@@ -253,10 +189,15 @@ class Movie extends Component {
 }
 
 const mapStateToProps = state => {
-  //console.log("redux", state);
   return {
-    userId: state.user.userId
+    userId: state.user.userId,
+    movie: state.movie.movie,
+    favorite: state.movie.favorite,
+    watchLater: state.movie.watchLater
   };
 };
 
-export default connect(mapStateToProps)(Movie);
+export default connect(
+  mapStateToProps,
+  { fetchMovie, addToList, removeFromList }
+)(Movie);

@@ -2,14 +2,18 @@ import {
   FETCH_MOVIES,
   FETCH_MOVIE,
   LOADING_MOVIES,
-  LOADING_MOVIE
+  LOADING_MOVIE,
+  FAVORITE,
+  WATCH_LATER
 } from "../actions/types";
 
 const initialState = {
   movies: [],
   movie: {},
   loadingMovies: false,
-  loadingMovie: false
+  loadingMovie: false,
+  favorite: false,
+  watchLater: false
 };
 
 export const movie = (state = initialState, action) => {
@@ -33,6 +37,16 @@ export const movie = (state = initialState, action) => {
       return {
         ...state,
         movieLoading: action.payload
+      };
+    case FAVORITE:
+      return {
+        ...state,
+        favorite: action.payload
+      };
+    case WATCH_LATER:
+      return {
+        ...state,
+        watchLater: action.payload
       };
     default:
       return state;
