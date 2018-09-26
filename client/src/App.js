@@ -9,7 +9,11 @@ const App = () => (
   <Router>
     <React.Fragment>
       <Header brand="Movie Reviews" />
-      <Route exact path="/" render={() => <Redirect to="/movies/recent" />} />
+      <Route
+        exact
+        path="/"
+        render={() => <Redirect to="/movies/recently-added" />}
+      />
       <Route exact path="/movies/:query" component={Movies} />
       <Route exact path="/movie/:movie_id" component={Movie} />
       <Route exact path="/results/:query" component={Results} />

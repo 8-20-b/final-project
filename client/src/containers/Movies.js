@@ -1,23 +1,21 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { connect } from "react-redux";
-import { API_ROOT } from "../services/api-config";
+import { fetchMovies } from "../actions/movie";
 import Navigation from "../components/Navigation";
 import MoviesList from "../components/MoviesList";
 
 class Movies extends Component {
-  state = {
-    movies: []
+  componentDidMount = () => {
+    this.props.fetchMovies(this.props.match.params.query, this.props.userId);
   };
 
-  componentDidMount = () => {
-    axios
-      .get(
-        `${API_ROOT}/movies?query=${this.props.match.params.query}&userId=${
-          this.props.userId
-        }`
-      )
-      .then(({ data: movies }) => this.setState({ movies }));
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.match.params.query !== this.props.match.params.query) {
+      this.props.fetchMovies(
+        nextProps.match.params.query,
+        this.props.userId || 0
+      );
+    }
   };
 
   render() {
@@ -35,7 +33,7 @@ class Movies extends Component {
             style={{ height: "calc(100vh - 62px)" }}
           >
             <h1 className="mb-4">{pageTitle}</h1>
-            <MoviesList movies={this.state.movies} />
+            <MoviesList movies={this.props.movies} />
           </main>
         </div>
       </div>
@@ -45,8 +43,12 @@ class Movies extends Component {
 
 const mapStateToProps = state => {
   return {
-    userId: state.user.userId
+    userId: state.user.userId,
+    movies: state.movie.movies
   };
 };
 
-export default connect(mapStateToProps)(Movies);
+export default connect(
+  mapStateToProps,
+  { fetchMovies }
+)(Movies);

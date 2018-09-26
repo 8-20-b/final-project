@@ -8,8 +8,6 @@ const List = require("../models").List;
 const Comments = require("../models").Comments;
 
 const getAll = (req, res) => {
-  console.log("query:", req.query.query);
-
   const where = {};
   let order = [];
   let include = [];
@@ -29,7 +27,7 @@ const getAll = (req, res) => {
     include = [
       {
         model: List,
-        where: { type: "favorite", userId: 1 }
+        where: { type: "favorite", userId: req.query.userId }
       }
     ];
   } else if (req.query.query === "watch-later") {
@@ -46,7 +44,11 @@ const getAll = (req, res) => {
     limit: 24,
     order,
     include
-  }).then(movies => res.json(movies));
+  })
+    .then(movies => res.json({ success: true, results: movies }))
+    .catch(err =>
+      res.json({ success: false, message: "Something went wrong:", err })
+    );
 };
 
 const getOne = (req, res) => {
