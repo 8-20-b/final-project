@@ -22,7 +22,7 @@ const getAll = (req, res) => {
           }
         );
       });
-      res.json(output);
+      res.json({ success: true, results: output });
     })
     .catch(err => console.log({ success: false, message: err }));
 };

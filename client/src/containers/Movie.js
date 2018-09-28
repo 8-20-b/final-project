@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchMovie, addToList, removeFromList } from "../actions/movie";
+import {
+  fetchMovie,
+  addToList,
+  removeFromList,
+  fetchActors
+} from "../actions/movie";
+import { fetchComments } from "../actions/comment";
 import axios from "axios";
 import { API_ROOT } from "../services/api-config";
 import Navigation from "../components/Navigation";
@@ -15,25 +21,17 @@ class Movie extends Component {
 
   componentDidMount = () => {
     this.props.fetchMovie(this.props.match.params.movie_id, this.props.userId);
-    this.searchCast();
+    this.props.fetchActors(this.props.match.params.movie_id);
+    this.props.fetchComments(this.props.match.params.movie_id);
     this.searchTrailer();
-    this.fetchComments();
   };
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.match.params.movie_id !== this.props.match.params.movie_id) {
       this.props.fetchMovie(nextProps.match.params.movie_id, this.props.userId);
+      this.props.fetchActors(nextProps.match.params.movie_id);
+      this.props.fetchComments(nextProps.match.params.movie_id);
     }
-  };
-
-  searchCast = () => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${
-          this.props.match.params.movie_id
-        }/credits?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
-      )
-      .then(credits => this.setState({ cast: credits.data.cast }));
   };
 
   searchTrailer = () => {
@@ -57,7 +55,9 @@ class Movie extends Component {
   fetchComments = () => {
     axios
       .get(`${API_ROOT}/comments/${this.props.match.params.movie_id}`)
-      .then(({ data: comments }) => this.setState({ comments }));
+      .then(({ data: comments }) =>
+        this.setState({ comments: comments.results })
+      );
   };
 
   addComment = ({ comment }) => {
@@ -175,8 +175,8 @@ class Movie extends Component {
               <div className="row mt-5">
                 <div className="col-12">
                   <MovieTabs
-                    actors={this.state.cast}
-                    comments={this.state.comments}
+                    actors={this.props.actors}
+                    comments={this.props.comments}
                     addComment={this.addComment}
                     removeComment={this.removeComment}
                   />
@@ -191,9 +191,12 @@ class Movie extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log("reduxState", state);
   return {
     userId: state.user.userId,
     movie: state.movie.movie,
+    actors: state.movie.actors,
+    comments: state.comment.comments,
     favorite: state.movie.favorite,
     watchLater: state.movie.watchLater
   };
@@ -201,5 +204,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchMovie, addToList, removeFromList }
+  { fetchMovie, addToList, removeFromList, fetchActors, fetchComments }
 )(Movie);

@@ -8,3 +8,8 @@ export const LOADING_MOVIE = "LOADING_MOVIE";
 export const FETCH_MOVIE = "FETCH_MOVIE";
 export const FAVORITE = "FAVORITE";
 export const WATCH_LATER = "WATCH_LATER";
+export const FETCH_ACTORS = "FETCH_ACTORS";
+export const LOADING_ACTORS = "LOADING_ACTORS";
+
+export const FETCH_COMMENTS = "FETCH_COMMENTS";
+export const LOADING_COMMENTS = "LOADING_COMMENTS";

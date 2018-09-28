@@ -2,6 +2,7 @@ import React from "react";
 import CommentsList from "../Comments";
 
 export default ({ actors, comments, addComment, removeComment }) => {
+  console.log("comments", comments);
   return (
     <div>
       <ul className="nav nav-tabs" id="movieTabs" role="tablist">

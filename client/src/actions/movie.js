@@ -4,7 +4,9 @@ import {
   FETCH_MOVIE,
   LOADING_MOVIE,
   FAVORITE,
-  WATCH_LATER
+  WATCH_LATER,
+  FETCH_ACTORS,
+  LOADING_ACTORS
 } from "./types";
 import api from "../services/movie";
 
@@ -50,6 +52,20 @@ export const watchLater = bool => {
   };
 };
 
+export const fetchedActors = actors => {
+  return {
+    type: FETCH_ACTORS,
+    payload: actors
+  };
+};
+
+export const loadingActors = bool => {
+  return {
+    type: LOADING_ACTORS,
+    payload: bool
+  };
+};
+
 export const fetchMovies = (query, userId) => dispatch => {
   dispatch(loadingMovies(true));
   api.movie.getMovies(query, userId).then(movies => {
@@ -90,5 +106,13 @@ export const removeFromList = (list, movieId, userId) => dispatch => {
     } else {
       dispatch(watchLater(false));
     }
+  });
+};
+
+export const fetchActors = movieId => dispatch => {
+  dispatch(loadingActors(true));
+  api.movie.fetchActors(movieId).then(actors => {
+    dispatch(fetchedActors(actors));
+    dispatch(loadingActors(false));
   });
 };

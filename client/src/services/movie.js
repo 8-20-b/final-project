@@ -34,6 +34,17 @@ export default {
           if (!res.data.success) throw Error(res.data.message);
 
           return res.data;
+        }),
+
+    fetchActors: movieId =>
+      axios
+        .get(
+          `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=b8579c1fd967de5bf38fd125a1b4b0bc`
+        )
+        .then(res => {
+          if (res.status !== 200) throw Error("Something went wrong.");
+
+          return res.data.cast;
         })
   }
 };
