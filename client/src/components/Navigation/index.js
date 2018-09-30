@@ -13,7 +13,9 @@ const Navigation = ({ query, isAuth }) => (
             to="/movies/recently-added"
           >
             Recently Added
-            {query === "recent" && <i className="fas fa-chevron-right mt-1" />}
+            {query === "recently-added" && (
+              <i className="fas fa-chevron-right mt-1" />
+            )}
           </NavLink>
         </li>
         <li className="nav-item">

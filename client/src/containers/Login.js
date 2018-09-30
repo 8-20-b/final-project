@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { login } from "../actions/user";
+import { login, userLoggedIn } from "../actions/user";
+import decode from "jwt-decode";
 import SignInForm from "../components/Forms/SignIn";
 import { Link } from "react-router-dom";
 
@@ -28,6 +29,14 @@ class Login extends Component {
         .then(res => {
           if (res.user.success) {
             localStorage.setItem("JWT", res.user.token);
+
+            const payload = decode(res.user.token);
+
+            const user = {
+              token: res.user.token,
+              userId: payload.userId
+            };
+            this.props.userLoggedIn(user);
 
             this.props.history.push("/");
           }
@@ -96,5 +105,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { login }
+  { login, userLoggedIn }
 )(Login);

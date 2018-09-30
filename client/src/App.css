@@ -1,13 +1,27 @@
 body {
   background-color: #202b32;
   color: #fff;
+  font-family: "Roboto", sans-serif;
 }
-
+a {
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #fff;
+  text-decoration: none;
+}
 .bg-danger {
   background-color: #ff2346 !important;
 }
 .bg-dark {
   background-color: #1a1c1f !important;
+}
+
+.truncate-text {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-link.active {
@@ -20,6 +34,127 @@ body {
   color: #888;
 }
 
+.form-control:focus {
+  box-shadow: none;
+}
+
 hr {
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+.movie-item {
+  margin-bottom: 40px;
+}
+.movie-item picture {
+  box-shadow: 0px 10px 30px 5px rgba(0, 0, 0, 0.4);
+  display: block;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+.movie-item picture::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: rgba(255, 66, 79, 0.5);
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+.movie-item span {
+  background-color: #ffb10a;
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: -14px;
+  width: 46px;
+  color: #fff;
+  height: 24px;
+  text-align: center;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-left: -23px;
+  transition: all 0.5s ease;
+}
+.movie-item picture svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -32px;
+  margin-top: -32px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 3;
+  transform: scale(0.5);
+}
+
+.movie-item figcaption {
+  margin-top: 10px;
+  font-family: "Poppins", sans-serif;
+}
+
+.movie-item figcaption h5 {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+.movie-item figcaption p {
+  font-size: 0.8rem;
+  color: #396e8c;
+}
+.movie-item:hover span {
+  transform: translateY(-4px);
+  background-color: #ff003d;
+}
+.movie-item:hover picture {
+  transform: translateY(-6px);
+}
+.movie-item:hover picture::before {
+  opacity: 1;
+}
+
+.movie-item:hover picture svg {
+  opacity: 0.9;
+  transform: scale(1);
+}
+
+.form-control::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1; /* Firefox */
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-brand {
+    width: auto;
+    background-color: transparent !important;
+  }
+  #mobileNav .nav-link {
+    padding: 10px 15px;
+  }
+  .search-form {
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 0 10px;
+    border-radius: 4px;
+  }
+  main > h1 {
+    margin-top: 30px;
+    font-size: 1.6rem;
+  }
+
+  .movie-card .movie-title {
+    font-size: 1.3rem;
+  }
+  .movie-card .btn {
+    padding: 3px 8px;
+  }
+
+  .btn-block + .btn-block {
+    margin-top: 0;
+  }
 }

@@ -27,7 +27,7 @@ class Movies extends Component {
           <Navigation query={this.props.match.params.query} />
           <main
             className="col-md-9 ml-sm-auto col-lg-10 pt-md-5 px-md-5"
-            style={{ height: "calc(100vh - 62px)" }}
+            style={{ height: "calc(100vh - 62px)", overflow: "scroll" }}
           >
             <h1 className="mb-4">{pageTitle}</h1>
             <MoviesList movies={this.props.movies} />

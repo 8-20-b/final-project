@@ -12,11 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     overview: {
       type: DataTypes.TEXT
     },
-    userRating: {
-      type: DataTypes.FLOAT(1, 1)
-    },
-    voteCount: {
-      type: DataTypes.INTEGER
+    voteAverage: {
+      type: DataTypes.STRING
     },
     posterPath: {
       type: DataTypes.STRING
@@ -30,22 +27,18 @@ module.exports = (sequelize, DataTypes) => {
     length: {
       type: DataTypes.INTEGER
     },
-    trailer: {
+    genres: {
       type: DataTypes.STRING
     }
   });
 
   Model.associate = function(models) {
-    this.Genres = this.belongsToMany(models.Genre, {
-      through: "MovieGenres",
-      foreignKey: "genreId"
-    });
     this.Movie = this.hasMany(models.List, {
       foreignKey: "movieId"
     });
   };
 
-  //sequelize.sync({ force: true });
+  // sequelize.sync({ force: true });
 
   return Model;
 };

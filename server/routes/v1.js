@@ -2,6 +2,7 @@ const router = require("express").Router();
 const userCtrl = require("../controllers/user");
 const movieCtrl = require("../controllers/movie");
 const commentCtrl = require("../controllers/comment");
+const activityCtrl = require("../controllers/activity");
 
 router.get("/", (req, res) => {
   res.status(404).json({
@@ -26,5 +27,7 @@ router.get("/comments/:movie_id", commentCtrl.getAll);
 router.put("/comments/:comment_id", commentCtrl.update);
 router.post("/comments", commentCtrl.create);
 router.delete("/comments/:comment_id", commentCtrl.remove);
+
+router.get("/activities", activityCtrl.getAll);
 
 module.exports = router;
