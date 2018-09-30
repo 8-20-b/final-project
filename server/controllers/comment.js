@@ -1,9 +1,11 @@
 const Comment = require("../models").Comment;
 const User = require("../models").User;
+const Activity = require("../models").Activity;
 
 const getAll = (req, res) => {
   Comment.findAll({
     where: { movieId: req.params.movie_id },
+    order: [["commentId", "DESC"]],
     include: [{ model: User }]
   })
     .then(comments => {
@@ -30,20 +32,26 @@ const getAll = (req, res) => {
 const create = (req, res) => {
   const { comment, movieId, userId } = req.body;
   Comment.create({ comment, movieId, userId })
-    .then(c => res.json({ success: true, data: c }))
-    .catch(() => res.json({ success: false }));
+    .then(result => {
+      Activity.create({ action: "commented", userId, movieId });
+
+      res.json({ success: true, result });
+    })
+    .catch(err => res.json({ success: false, message: err }));
 };
 
 const update = (req, res) => {
   const { comment } = req.body;
   Comment.update({ comment }, { where: { commentId: req.params.comment_id } })
     .then(() => res.json({ success: true }))
-    .catch(() => res.json({ success: false }));
+    .catch(() =>
+      res.json({ success: false, message: "Something went wrong." })
+    );
 };
 
 const remove = (req, res) => {
   Comment.destroy({ where: { commentId: req.params.comment_id } })
-    .then(() => res.json({ success: true }))
+    .then(() => res.json({ success: true, result: req.params.comment_id }))
     .catch(err => res.json({ success: false, message: err }));
 };
 

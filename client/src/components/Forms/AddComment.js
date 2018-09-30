@@ -41,7 +41,7 @@ export default class AddComment extends Component {
             const errors = this.validate(this.state.comment);
 
             Object.keys(errors).length < 1
-              ? this.props.onSubmit(this.state)
+              ? this.props.onSubmit(this.state.comment)
               : this.setState({ errors });
           }}
           className="mt-4 btn btn-danger"

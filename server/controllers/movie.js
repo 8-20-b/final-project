@@ -5,6 +5,7 @@ const Op = Sequelize.Op;
 
 const Movie = require("../models").Movie;
 const List = require("../models").List;
+const Activity = require("../models").Activity;
 
 const getAll = (req, res) => {
   const where = {};
@@ -85,9 +86,8 @@ const create = (req, res) => {
               releaseDate: imdb.release_date,
               length: imdb.runtime,
               title: imdb.title,
-              userRating: imdb.vote_average,
-              voteCount: imdb.vote_count
-              // Genres: imdb.genres
+              voteAverage: imdb.vote_average,
+              genres: imdb.genres.map(genre => genre.name).join(", ")
             };
 
             Movie.create(newMovie).then(createdMovie =>
@@ -104,8 +104,11 @@ const addToList = (req, res) => {
   List.findOne({ where: { type, movieId, userId } }).then(list => {
     if (!list) {
       List.create({ type, movieId, userId })
-        .then(() => res.json({ success: true }))
-        .catch(() => res.json({ success: false }));
+        .then(() => {
+          Activity.create({ action: "liked", userId, movieId });
+          res.json({ success: true });
+        })
+        .catch(err => res.json({ success: false, message: err }));
     } else {
       res.json({ success: true });
     }

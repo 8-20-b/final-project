@@ -1,12 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define("List", {
-    listId: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-    type: {
-      type: DataTypes.ENUM("favorite", "later"),
+  var Model = sequelize.define("Activity", {
+    action: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     userId: {
@@ -20,15 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Model.associate = function(models) {
-    this.List = this.belongsTo(models.Movie, {
+    this.Activity = this.belongsTo(models.Movie, {
       foreignKey: "movieId"
     });
-    this.List = this.belongsTo(models.User, {
+    this.Activity = this.belongsTo(models.User, {
       foreignKey: "userId"
     });
   };
 
   // Model.sync({ force: true });
-  // sequelize.sync({ force: true });
+
   return Model;
 };

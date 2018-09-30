@@ -21,5 +21,13 @@ module.exports = (sequelize, DataTypes) => {
     profilePic: DataTypes.STRING
   });
 
+  Model.associate = function(models) {
+    this.User = this.hasMany(models.List, {
+      foreignKey: "userId"
+    });
+  };
+
+  // Model.sync({ force: true });
+
   return Model;
 };

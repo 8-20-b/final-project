@@ -11,17 +11,17 @@ const Header = ({ brand, isAuth, logout }) => (
       style={{ backgroundColor: "rgba(0,0,0,.1)" }}
       to="/"
     >
-      {brand}
+      <img src="/images/logo.png" alt={brand} style={{ height: "32px" }} />
     </NavLink>
     <button
       className="navbar-toggler"
       type="button"
       data-toggle="collapse"
-      data-target="#navbarCollapse"
+      data-target="#mobileNav"
     >
       <span className="navbar-toggler-icon" />
     </button>
-    <div className="collapse navbar-collapse" id="navbarCollapse">
+    <div className="collapse navbar-collapse" id="mobileNav">
       <SearchForm />
       <ul className="navbar-nav ml-auto mr-3">
         {isAuth ? (
