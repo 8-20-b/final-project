@@ -129,25 +129,32 @@ hr {
   opacity: 1; /* Firefox */
 }
 
-:-ms-input-placeholder {
-  /* Internet Explorer 10-11 */
-  color: red;
-}
-
-::-ms-input-placeholder {
-  /* Microsoft Edge */
-  color: red;
-}
-
 @media screen and (max-width: 768px) {
   .navbar-brand {
     width: auto;
     background-color: transparent !important;
   }
+  #mobileNav .nav-link {
+    padding: 10px 15px;
+  }
+  .search-form {
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 0 10px;
+    border-radius: 4px;
+  }
+  main > h1 {
+    margin-top: 30px;
+    font-size: 1.6rem;
+  }
+
   .movie-card .movie-title {
     font-size: 1.3rem;
   }
-  .btn {
+  .movie-card .btn {
     padding: 3px 8px;
+  }
+
+  .btn-block + .btn-block {
+    margin-top: 0;
   }
 }
