@@ -20,7 +20,7 @@ export default ({ movie }) => (
         </svg>
         <img
           className="d-block w-100 "
-          src={`http://image.tmdb.org/t/p/w300/${movie.posterPath}`}
+          src={`https://image.tmdb.org/t/p/w300/${movie.posterPath}`}
           alt={movie.title}
         />
       </picture>
