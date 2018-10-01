@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { fetchActors } from "../../actions/movie";
 import { connect } from "react-redux";
+import Placeholder from "../Placeholder";
 
 export class Actors extends Component {
   static propTypes = {
@@ -31,11 +32,15 @@ export class Actors extends Component {
               data-fancybox
               href={`https://image.tmdb.org/t/p/original/${actor.profile_path}`}
             >
-              <img
-                className="img-fluid mb-3 mb-md-1"
-                src={`https://image.tmdb.org/t/p/w300/${actor.profile_path}`}
-                alt={actor.name}
-              />
+              {actor.profile_path ? (
+                <img
+                  className="img-fluid mb-3 mb-md-1"
+                  src={`https://image.tmdb.org/t/p/w300/${actor.profile_path}`}
+                  alt={actor.name}
+                />
+              ) : (
+                <Placeholder />
+              )}
             </a>
             <h5 className="d-none d-md-block">{actor.name}</h5>
           </div>

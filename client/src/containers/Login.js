@@ -64,14 +64,12 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="mt-5">
+      <div className="mt-5 login-page">
         <div className="text-center mb-5">
           <h1 className="mb-4 text-light">Sign In To Your Account</h1>
-          <p className="text-muted">
-            Thank you for using our service. Please enter your credentials.
-          </p>
+          <p className="text-muted">Thank you for using our service.</p>
           <p>
-            Not a member yet? Sign up for free!{" "}
+            Not a member yet?&nbsp;
             <Link to="/register" className="text-danger">
               Sign up for an account.
             </Link>
@@ -80,7 +78,7 @@ class Login extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-7 m-auto">
-              <div className="bg-dark rounded p-5 text-white">
+              <div className="bg-dark rounded p-4 p-md-5 text-white">
                 <SignInForm
                   onChange={this.handleChange}
                   onSubmit={this.handleSubmit}

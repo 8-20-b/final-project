@@ -56,7 +56,7 @@ class Register extends Component {
 
   render() {
     return (
-      <div className="mt-5">
+      <div className="mt-5 login-page">
         <div className="text-center mb-5">
           <h1 className="mb-4 text-light">Sign Up... It's Free!</h1>
           <p className="text-muted">
@@ -73,7 +73,7 @@ class Register extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-7 m-auto">
-              <div className="bg-dark rounded p-5 text-white">
+              <div className="bg-dark rounded p-4 p-md-5 text-white">
                 <SignUpForm
                   onChange={this.handleChange}
                   onSubmit={this.handleSubmit}

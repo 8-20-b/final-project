@@ -83,7 +83,6 @@ class Movie extends Component {
                   </h2>
                   {!this.props.loadingMovie && (
                     <div>
-                      {console.log("rating", Number(movie.voteAverage) || 0)}
                       <span className="badge badge-danger mr-2">
                         {movie.voteAverage}
                       </span>
@@ -164,7 +163,10 @@ class Movie extends Component {
                         data-fancybox
                         className="btn btn-outline-light"
                       >
-                        <i className="far fa-play-circle" /> Watch Trailer
+                        <i className="far fa-play-circle" />{" "}
+                        <span className="d-none d-sm-inline-block">
+                          Watch Trailer
+                        </span>
                       </a>
                     )}
                   </div>

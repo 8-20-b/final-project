@@ -17,6 +17,13 @@ class Search extends Component {
     }
   };
 
+  componentWillUpdate = (nextProps, nextState) => {
+    // if (nextState.search.length === 0) {
+    //   console.log("search empty");
+    //   this.setState({ results: [] });
+    // }
+  };
+
   searchMovies = () => {
     axios
       .get(
@@ -49,15 +56,12 @@ class Search extends Component {
           value={this.state.search}
         />
         {this.state.results.length > 0 && (
-          <ul
-            className="list-group position-absolute bg-dark rounded-0"
-            style={{ top: "62px", zIndex: 99999 }}
-          >
+          <ul className="list-group position-absolute bg-dark rounded-0 search-results">
             {this.state.results.splice(0, 5).map(res => (
               <li key={res.id} className="list-group-item text-black text-dark">
                 <Link
                   to={`/movie/${res.id}`}
-                  className="btn btn-link"
+                  className="btn btn-link text-white-50"
                   onClick={() => {
                     this.goToMovie(res.id);
                   }}

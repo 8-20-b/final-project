@@ -34,7 +34,8 @@ class Comment extends Component {
           </div>
           <div className="col-md-10 text-center text-md-left">
             <h2>
-              {comment.firstName} {comment.lastName}
+              {comment.firstName ? comment.firstName : "Unknown"}
+              {comment.lastName}
             </h2>
             <time className="text-white-50">
               <TimeAgo date={comment.createdAt} />

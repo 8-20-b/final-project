@@ -6,34 +6,15 @@ import TimeAgo from "react-timeago";
 
 export default class Activities extends Component {
   state = {
-    activities: [
-      {
-        activityId: 1,
-        date: "2018-09-22 21:00:00",
-        profile: "https://avatars2.githubusercontent.com/u/15160756?s=460&v=4",
-        name: "Dioni M."
-      },
-      {
-        activityId: 1,
-        date: "2018-09-20 00:00:00",
-        profile: "https://avatars1.githubusercontent.com/u/31051973?s=460&v=4",
-        name: "Lisa E."
-      },
-      {
-        activityId: 1,
-        date: "2018-09-19 00:00:00",
-        profile: "https://avatars1.githubusercontent.com/u/36522327?s=460&v=4",
-        name: "Charsta Scott"
-      }
-    ]
+    activities: []
   };
 
   componentDidMount = () => {
-    axios
-      .get(`${API_ROOT}/activities`)
-      .then(activities =>
-        this.setState({ activities: activities.data.results })
-      );
+    axios.get(`${API_ROOT}/activities`).then(activities => {
+      if (activities.data.success) {
+        this.setState({ activities: activities.data.results });
+      }
+    });
   };
 
   render() {
@@ -52,15 +33,16 @@ export default class Activities extends Component {
                         ? activity.profile
                         : "/images/profile.png"
                     }
-                    alt={activity.name}
+                    alt={`${activity.firstName} ${activity.lastName}`}
                   />
                 </div>
-                <strong>{activity.name}</strong> {activity.action}
+                <strong className="text-white">
+                  {activity.firstName ? activity.firstName : "Unknown"}{" "}
+                  {activity.lastName && activity.lastName.substr(0, 1)}
+                </strong>
+                {activity.action}
                 <br />
-                <Link
-                  to={`/movies/${activity.movieId}`}
-                  className="text-danger"
-                >
+                <Link to={`/movie/${activity.movieId}`} className="text-danger">
                   {activity.title}
                 </Link>
                 <br />

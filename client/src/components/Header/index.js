@@ -24,7 +24,7 @@ const Header = ({ brand, isAuth, logout }) => (
         style={{ height: "32px" }}
       />
     </NavLink>
-    <div className="d-block d-md-none search-form">
+    <div className="d-block mr-md-5 search-form">
       <SearchForm />
     </div>
     <button

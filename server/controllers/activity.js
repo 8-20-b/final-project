@@ -15,10 +15,8 @@ const getAll = (req, res) => {
           {},
           {
             userId: activity.User.userId,
-            name: `${activity.User.firstName} ${activity.User.lastName.substr(
-              0,
-              1
-            )}.`,
+            firstName: activity.User.firstName,
+            lastName: activity.User.lastName,
             profile: activity.User.profilePic,
             action: activity.action,
             movieId: activity.Movie.movieId,
